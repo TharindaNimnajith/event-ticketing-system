@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * Configuration class for setting up CORS (Cross-Origin Resource Sharing)
  */
 @Configuration
-public class WebConfiguration {
+public class CorsConfiguration {
 
   private static final String PATH_PATTERN = "/api/**";
   private static final String ALLOWED_ORIGIN_FRONTEND_URL = "http://localhost:3000";

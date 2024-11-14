@@ -26,6 +26,8 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
   public void run(final ApplicationArguments applicationArguments) {
     Scanner scanner = new Scanner(System.in);
 
+    log.info("\nEnter Ticketing Configurations:");
+
     String promptMaxTicketCapacity = "Max Ticket Capacity: ";
     int maxTicketCapacity = validateInput(scanner, promptMaxTicketCapacity);
     ticketingConfiguration.setMaxTicketCapacity(maxTicketCapacity);
@@ -41,6 +43,13 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
     String promptCustomerRetrievalRate = "Customer Retrieval Rate: ";
     int customerRetrievalRate = validateInput(scanner, promptCustomerRetrievalRate);
     ticketingConfiguration.setCustomerRetrievalRate(customerRetrievalRate);
+
+    log.info("\nTicketing Configurations: {}: {}; {}: {}; {}: {}; {}: {};",
+        "Max Ticket Capacity", ticketingConfiguration.getMaxTicketCapacity(),
+        "Total Tickets", ticketingConfiguration.getTotalTickets(),
+        "Ticket Release Rate", ticketingConfiguration.getTicketReleaseRate(),
+        "Customer Retrieval Rate", ticketingConfiguration.getCustomerRetrievalRate()
+    );
   }
 
   /**
