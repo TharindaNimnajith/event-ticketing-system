@@ -1,4 +1,4 @@
-package com.iit.event.ticketing.system.entity;
+package com.iit.event.ticketing.system.core.model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.iit.event.ticketing.system.controller;
+package com.iit.event.ticketing.system.api.v1;
 
-import com.iit.event.ticketing.system.entity.Customer;
-import com.iit.event.ticketing.system.entity.Vendor;
+import com.iit.event.ticketing.system.core.model.Customer;
+import com.iit.event.ticketing.system.core.model.Vendor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

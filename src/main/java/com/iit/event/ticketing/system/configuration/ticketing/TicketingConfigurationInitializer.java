@@ -1,4 +1,4 @@
-package com.iit.event.ticketing.system.configuration;
+package com.iit.event.ticketing.system.configuration.ticketing;
 
 import java.util.Scanner;
 import lombok.RequiredArgsConstructor;

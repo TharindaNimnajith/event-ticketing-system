@@ -1,4 +1,4 @@
-package com.iit.event.ticketing.system.entity;
+package com.iit.event.ticketing.system.core.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
