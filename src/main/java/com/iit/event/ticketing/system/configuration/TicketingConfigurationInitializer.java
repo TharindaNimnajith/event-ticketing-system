@@ -2,6 +2,7 @@ package com.iit.event.ticketing.system.configuration;
 
 import java.util.Scanner;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class TicketingConfigurationInitializer implements ApplicationRunner {
 
   private final TicketingConfiguration ticketingConfiguration;
@@ -55,7 +57,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
 
     // Check if Total Tickets user input is not greater than Max Tickets Capacity
     while (totalTickets > maxTicketsCapacity) {
-      System.out.println("Incorrect Input - Total Tickets should be less than Max Ticket Capacity: " + maxTicketsCapacity);
+      log.warn("\nIncorrect Input - Total Tickets should be less than Max Ticket Capacity ({})", maxTicketsCapacity);
       totalTickets = validateInput(scanner, prompt);
     }
 
@@ -72,7 +74,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
    */
   private int validateInput(final Scanner scanner, final String prompt) {
     while (true) {
-      System.out.print(prompt);
+      log.info("\n{}", prompt);
 
       // Check if user input is an integer
       if (scanner.hasNextInt()) {
@@ -82,10 +84,10 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
         if (input > 0) {
           return input;
         } else {
-          System.out.println("Incorrect Input - Value should be greater than 0");
+          log.warn("\nIncorrect Input - Value should be greater than 0");
         }
       } else {
-        System.out.println("Incorrect Input - Value should be an integer");
+        log.warn("\nIncorrect Input - Value should be an integer");
         scanner.next(); // Consuming invalid input
       }
     }

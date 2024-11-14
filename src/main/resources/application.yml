@@ -1,6 +1,28 @@
 spring:
   application:
     name: event-ticketing-system
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      base-path: /management
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
+
+logging:
+  level:
+    com.iit.event.ticketing.system: trace
 
 ticketing:
   total-tickets: 0
