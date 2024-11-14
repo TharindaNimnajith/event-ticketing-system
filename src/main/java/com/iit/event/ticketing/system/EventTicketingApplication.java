@@ -1,6 +1,6 @@
-package com.iit.system.event_ticketing;
+package com.iit.event.ticketing.system;
 
-import com.iit.system.event_ticketing.configuration.TicketingConfiguration;
+import com.iit.event.ticketing.system.configuration.TicketingConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

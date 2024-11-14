@@ -1,8 +1,8 @@
-package com.iit.system.event_ticketing.controller;
+package com.iit.event.ticketing.system.controller;
 
-import com.iit.system.event_ticketing.configuration.TicketingConfiguration;
-import com.iit.system.event_ticketing.entity.Customer;
-import com.iit.system.event_ticketing.entity.Vendor;
+import com.iit.event.ticketing.system.configuration.TicketingConfiguration;
+import com.iit.event.ticketing.system.entity.Customer;
+import com.iit.event.ticketing.system.entity.Vendor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
