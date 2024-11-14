@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Vendor
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,6 +20,9 @@ public class Vendor implements Runnable {
   private int ticketsPerRelease;
   private int releaseInterval;
 
+  /**
+   * Execute vendor functionality
+   */
   @Override
   public void run() {
     log.info("Vendor run");

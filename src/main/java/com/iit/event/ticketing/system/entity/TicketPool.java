@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Ticket Pool
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,10 +20,16 @@ public class TicketPool {
 
   private List<Ticket> ticketList = new ArrayList<>();
 
+  /**
+   * Add tickets
+   */
   public void addTickets() {
     log.info("Add tickets");
   }
 
+  /**
+   * Remove ticket
+   */
   public void removeTicket() {
     log.info("Remove ticket");
   }

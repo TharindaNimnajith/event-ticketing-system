@@ -7,7 +7,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 /**
- * Initializing the Ticketing Configurations
+ * Initialize TicketingConfiguration by prompting user to input values at application startup
  */
 @Component
 @RequiredArgsConstructor
@@ -16,68 +16,78 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
   private final TicketingConfiguration ticketingConfiguration;
 
   /**
-   * Prompt the user into entering the configuration values and set them into ticketing configurations
+   * Executes on application startup to prompt user for ticketing configuration values
    *
-   * @param args ApplicationArguments
+   * @param applicationArguments Incoming application arguments
    */
   @Override
-  public void run(final ApplicationArguments args) {
+  public void run(final ApplicationArguments applicationArguments) {
     Scanner scanner = new Scanner(System.in);
 
-    String promptMaxTicketCapacity = "Enter Maximum Tickets Capacity :";
-    int maxTicketsCapacity = validateInput(scanner, promptMaxTicketCapacity);
-    ticketingConfiguration.setMaxTicketCapacity(maxTicketsCapacity);
+    String promptMaxTicketCapacity = "Max Ticket Capacity: ";
+    int maxTicketCapacity = validateInput(scanner, promptMaxTicketCapacity);
+    ticketingConfiguration.setMaxTicketCapacity(maxTicketCapacity);
 
-    String promptTotalTickets = "Enter Total Tickets :";
-    int totalTickets = validateInput(scanner, promptTotalTickets, maxTicketsCapacity); //method overloading was used
+    String promptTotalTickets = "Total Tickets: ";
+    int totalTickets = validateInput(scanner, promptTotalTickets, maxTicketCapacity);
     ticketingConfiguration.setTotalTickets(totalTickets);
 
-    String promptTicketReleaseRate = "Enter Ticket Release Rate:";
+    String promptTicketReleaseRate = "Ticket Release Rate: ";
     int ticketReleaseRate = validateInput(scanner, promptTicketReleaseRate);
     ticketingConfiguration.setTicketReleaseRate(ticketReleaseRate);
 
-    String promptCustomerRetrievalRate = "Enter Customer Retrieval  Rate:";
+    String promptCustomerRetrievalRate = "Customer Retrieval Rate: ";
     int customerRetrievalRate = validateInput(scanner, promptCustomerRetrievalRate);
     ticketingConfiguration.setCustomerRetrievalRate(customerRetrievalRate);
   }
 
   /**
-   * Validating the values entered through the input
+   * <p> Validate to ensure that Total Tickets user input is a positive integer not greater than Max Tickets Capacity </p>
+   * <p> Otherwise prompt again with a relevant error message </p>
    *
-   * @param scanner
-   * @param prompt
-   * @return returns a valid input
+   * @param scanner            Scanner
+   * @param prompt             Prompt
+   * @param maxTicketsCapacity Max Tickets Capacity
+   * @return Valid Total Tickets input
    */
-  private int validateInput(Scanner scanner, String prompt) {
-    while (true) {
-      System.out.print(prompt);
-
-      // Checking if the input entered is a valid integer
-      if (scanner.hasNextInt()) {
-        int input = scanner.nextInt();
-
-        // Checking if the input is a positive integer
-        if (input > 0) {
-          return input;
-        } else {
-          System.out.println("Incorrect Input. Please Enter a value Greater than 0 ");
-        }
-      } else {
-        System.out.println("Incorrect Input. Please Enter an Integer Value");
-        scanner.next(); // Consuming the invalid input
-      }
-    }
-  }
-
-
-  private int validateInput(Scanner scanner, String prompt, int maxTicketsCapacity) {
+  private int validateInput(final Scanner scanner, final String prompt, final int maxTicketsCapacity) {
     int totalTickets = validateInput(scanner, prompt);
 
+    // Check if Total Tickets user input is not greater than Max Tickets Capacity
     while (totalTickets > maxTicketsCapacity) {
-      System.out.println("The Total Ticket count  Available should be less than the Maximum Ticket Capacity:" + maxTicketsCapacity);
+      System.out.println("Incorrect Input - Total Tickets should be less than Max Ticket Capacity: " + maxTicketsCapacity);
       totalTickets = validateInput(scanner, prompt);
     }
 
     return totalTickets;
+  }
+
+  /**
+   * <p> Validate to ensure that user input is a positive integer </p>
+   * <p> Otherwise prompt again with a relevant error message </p>
+   *
+   * @param scanner Scanner
+   * @param prompt  Prompt
+   * @return Valid input
+   */
+  private int validateInput(final Scanner scanner, final String prompt) {
+    while (true) {
+      System.out.print(prompt);
+
+      // Check if user input is an integer
+      if (scanner.hasNextInt()) {
+        int input = scanner.nextInt();
+
+        // Check if user input is a positive integer
+        if (input > 0) {
+          return input;
+        } else {
+          System.out.println("Incorrect Input - Value should be greater than 0");
+        }
+      } else {
+        System.out.println("Incorrect Input - Value should be an integer");
+        scanner.next(); // Consuming invalid input
+      }
+    }
   }
 }
