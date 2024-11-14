@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: event-ticketing-system
+
+ticketing:
+  total-tickets: 0
+  ticket-release-rate: 0
+  customer-retrieval-rate: 0
+  max-ticket-capacity: 0
