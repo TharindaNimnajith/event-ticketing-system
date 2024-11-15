@@ -42,4 +42,4 @@ out/
 .vscode/
 
 ### Event Ticketing System ###
-ticketing-configurations.json
+#ticketing-configurations.json

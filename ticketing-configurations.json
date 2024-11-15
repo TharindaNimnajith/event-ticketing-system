@@ -1,0 +1,6 @@
+{
+  "total_tickets" : 10,
+  "ticket_release_rate" : 2000,
+  "customer_retrieval_rate" : 3000,
+  "max_ticket_capacity" : 100
+}
