@@ -21,7 +21,7 @@ public class ConfigurationService {
   /**
    * Get ticketing configurations
    *
-   * @return ApiResponse containing TicketingConfiguration
+   * @return ApiResponse containing TicketingConfiguration (Not null)
    */
   public @NonNull ApiResponse<TicketingConfiguration> getConfigurations() {
     log.info("Get ticketing configurations");
@@ -40,7 +40,7 @@ public class ConfigurationService {
    * Add ticketing configurations
    *
    * @param ticketingConfig TicketingConfiguration
-   * @return ApiResponse
+   * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addConfigurations(final TicketingConfiguration ticketingConfig) {
     log.info("Add ticketing configurations");

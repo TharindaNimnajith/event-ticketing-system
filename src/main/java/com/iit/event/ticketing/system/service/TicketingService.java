@@ -16,7 +16,7 @@ public class TicketingService {
   /**
    * Start simulation
    *
-   * @return ApiResponse
+   * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> start() {
     log.info("Started simulation");
@@ -26,7 +26,7 @@ public class TicketingService {
   /**
    * Stop simulation
    *
-   * @return ApiResponse
+   * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> stop() {
     log.info("Stopped simulation");
