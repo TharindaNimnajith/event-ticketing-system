@@ -1,6 +1,8 @@
 package com.iit.event.ticketing.system.configuration.ticketing;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "ticketing")
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -25,14 +28,14 @@ import org.springframework.context.annotation.Configuration;
 public class TicketingConfiguration implements Serializable {
 
   @JsonProperty("total_tickets")
-  private int totalTickets;
+  private Integer totalTickets;
 
   @JsonProperty("ticket_release_rate")
-  private int ticketReleaseRate;
+  private Integer ticketReleaseRate;
 
   @JsonProperty("customer_retrieval_rate")
-  private int customerRetrievalRate;
+  private Integer customerRetrievalRate;
 
   @JsonProperty("max_ticket_capacity")
-  private int maxTicketCapacity;
+  private Integer maxTicketCapacity;
 }

@@ -1,6 +1,9 @@
 package com.iit.event.ticketing.system.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +16,7 @@ import org.springframework.http.HttpStatus;
  * Custom API Response
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -20,9 +24,16 @@ import org.springframework.http.HttpStatus;
 @Builder
 public class ApiResponse<T> {
 
+  @JsonProperty("http_status")
   private HttpStatus httpStatus;
+
+  @JsonProperty("message")
   private String message;
+
+  @JsonProperty("data")
   private T data;
+
+  @JsonProperty("errors")
   private List<String> errors;
 
   /**
