@@ -28,27 +28,27 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
 
     log.info("\nEnter Ticketing Configurations:");
 
-    String promptMaxTicketCapacity = "Max Ticket Capacity: ";
+    String promptMaxTicketCapacity = "Max Ticket Capacity:";
     int maxTicketCapacity = validateInput(scanner, promptMaxTicketCapacity);
     ticketingConfiguration.setMaxTicketCapacity(maxTicketCapacity);
 
-    String promptTotalTickets = "Total Tickets: ";
+    String promptTotalTickets = "Total Tickets:";
     int totalTickets = validateInput(scanner, promptTotalTickets, maxTicketCapacity);
     ticketingConfiguration.setTotalTickets(totalTickets);
 
-    String promptTicketReleaseRate = "Ticket Release Rate: ";
+    String promptTicketReleaseRate = "Ticket Release Rate (In Milliseconds):";
     int ticketReleaseRate = validateInput(scanner, promptTicketReleaseRate);
     ticketingConfiguration.setTicketReleaseRate(ticketReleaseRate);
 
-    String promptCustomerRetrievalRate = "Customer Retrieval Rate: ";
+    String promptCustomerRetrievalRate = "Customer Retrieval Rate (In Milliseconds):";
     int customerRetrievalRate = validateInput(scanner, promptCustomerRetrievalRate);
     ticketingConfiguration.setCustomerRetrievalRate(customerRetrievalRate);
 
-    log.info("\nTicketing Configurations: {}: {}; {}: {}; {}: {}; {}: {};",
+    log.info("\nTicketing Configurations:\n{}: {}\n{}: {}\n{}: {}\n{}: {}",
         "Max Ticket Capacity", ticketingConfiguration.getMaxTicketCapacity(),
         "Total Tickets", ticketingConfiguration.getTotalTickets(),
-        "Ticket Release Rate", ticketingConfiguration.getTicketReleaseRate(),
-        "Customer Retrieval Rate", ticketingConfiguration.getCustomerRetrievalRate()
+        "Ticket Release Rate (In Milliseconds)", ticketingConfiguration.getTicketReleaseRate(),
+        "Customer Retrieval Rate (In Milliseconds)", ticketingConfiguration.getCustomerRetrievalRate()
     );
   }
 
