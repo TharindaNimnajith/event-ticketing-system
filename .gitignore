@@ -1,3 +1,4 @@
+### Spring Boot ###
 HELP.md
 .gradle
 build/
@@ -5,6 +6,8 @@ target/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+### macOS ###
 .DS_Store
 
 ### STS ###
@@ -37,3 +40,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Event Ticketing System ###
+ticketing-configurations.json
