@@ -26,6 +26,6 @@ public class Customer implements Runnable {
    */
   @Override
   public void run() {
-    log.info("Customer run");
+    log.debug("Customer run");
   }
 }

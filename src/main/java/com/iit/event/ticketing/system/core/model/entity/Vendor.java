@@ -27,6 +27,6 @@ public class Vendor implements Runnable {
    */
   @Override
   public void run() {
-    log.info("Vendor run");
+    log.debug("Vendor run");
   }
 }

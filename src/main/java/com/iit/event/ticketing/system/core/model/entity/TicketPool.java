@@ -1,6 +1,7 @@
 package com.iit.event.ticketing.system.core.model.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,19 +21,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TicketPool {
 
-  private List<Ticket> ticketList = new ArrayList<>();
+  private List<Ticket> ticketList = Collections.synchronizedList(new ArrayList<>());
 
   /**
    * Add tickets
    */
   public void addTickets() {
-    log.info("Add tickets");
+    log.debug("Add tickets");
   }
 
   /**
    * Remove ticket
    */
   public void removeTicket() {
-    log.info("Remove ticket");
+    log.debug("Remove ticket");
   }
 }

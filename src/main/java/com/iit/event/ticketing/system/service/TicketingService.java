@@ -19,7 +19,7 @@ public class TicketingService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> start() {
-    log.info("Started simulation");
+    log.debug("Started simulation");
     return new ApiResponse<>(HttpStatus.OK, "Started simulation");
   }
 
@@ -29,7 +29,7 @@ public class TicketingService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> stop() {
-    log.info("Stopped simulation");
+    log.debug("Stopped simulation");
     return new ApiResponse<>(HttpStatus.OK, "Stopped simulation");
   }
 }

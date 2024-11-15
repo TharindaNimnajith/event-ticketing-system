@@ -1,5 +1,6 @@
 package com.iit.event.ticketing.system.configuration.ticketing;
 
+import com.iit.event.ticketing.system.util.FileUtils;
 import java.util.Scanner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TicketingConfigurationInitializer implements ApplicationRunner {
 
-  private final TicketingConfiguration ticketingConfiguration;
-
   /**
    * Executes on application startup to prompt user for ticketing configuration values
    *
@@ -25,6 +24,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
   @Override
   public void run(final ApplicationArguments applicationArguments) {
     Scanner scanner = new Scanner(System.in);
+    TicketingConfiguration ticketingConfiguration = new TicketingConfiguration();
 
     log.info("\nEnter Ticketing Configurations:");
 
@@ -44,12 +44,11 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
     int customerRetrievalRate = validateInput(scanner, promptCustomerRetrievalRate);
     ticketingConfiguration.setCustomerRetrievalRate(customerRetrievalRate);
 
-    log.info("\nTicketing Configurations:\n{}: {}\n{}: {}\n{}: {}\n{}: {}",
-        "Max Ticket Capacity", ticketingConfiguration.getMaxTicketCapacity(),
-        "Total Tickets", ticketingConfiguration.getTotalTickets(),
-        "Ticket Release Rate (In Milliseconds)", ticketingConfiguration.getTicketReleaseRate(),
-        "Customer Retrieval Rate (In Milliseconds)", ticketingConfiguration.getCustomerRetrievalRate()
-    );
+    // Save ticketing configurations to file
+    FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
+
+    // Print loaded ticketing configurations from file to console
+    printTicketingConfigurations();
   }
 
   /**
@@ -100,5 +99,19 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
         scanner.next(); // Consuming invalid input
       }
     }
+  }
+
+  /**
+   * Print ticketing configurations loaded from file
+   */
+  private void printTicketingConfigurations() {
+    TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
+
+    log.info("\nTicketing Configurations:\n{}: {}\n{}: {}\n{}: {}\n{}: {}",
+        "Max Ticket Capacity", ticketingConfiguration.getMaxTicketCapacity(),
+        "Total Tickets", ticketingConfiguration.getTotalTickets(),
+        "Ticket Release Rate (In Milliseconds)", ticketingConfiguration.getTicketReleaseRate(),
+        "Customer Retrieval Rate (In Milliseconds)", ticketingConfiguration.getCustomerRetrievalRate()
+    );
   }
 }
