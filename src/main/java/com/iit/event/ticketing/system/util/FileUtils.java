@@ -35,7 +35,7 @@ public class FileUtils {
       writer.writeValue(new File(TICKETING_CONFIG_FILE_PATH), ticketingConfiguration);
       log.debug("Ticketing configurations saved to file ({})", TICKETING_CONFIG_FILE_PATH);
     } catch (IOException ex) {
-      log.error("Error while saving ticketing configurations to file ({})", TICKETING_CONFIG_FILE_PATH);
+      log.error("Error while saving ticketing configurations to file ({}) - Error: {}", TICKETING_CONFIG_FILE_PATH, ex.getMessage(), ex);
     }
   }
 
@@ -50,7 +50,7 @@ public class FileUtils {
       log.debug("Ticketing configurations loaded from file ({})", TICKETING_CONFIG_FILE_PATH);
       return ticketingConfiguration;
     } catch (IOException ex) {
-      log.error("Error while loading ticketing configurations from file ({})", TICKETING_CONFIG_FILE_PATH);
+      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIG_FILE_PATH, ex.getMessage(), ex);
       return new TicketingConfiguration();
     }
   }
