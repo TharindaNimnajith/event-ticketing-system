@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Configuration Controller
  */
 @RestController
-@RequestMapping("/config")
+@RequestMapping("v1/configs")
 @RequiredArgsConstructor
 @Slf4j
 public class ConfigurationController {

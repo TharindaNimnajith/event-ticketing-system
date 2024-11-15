@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Ticketing Controller
  */
 @RestController
-@RequestMapping("/ticketing")
+@RequestMapping("v1/ticketing")
 @RequiredArgsConstructor
 @Slf4j
 public class TicketingController {
@@ -24,7 +24,7 @@ public class TicketingController {
    *
    * @return ResponseEntity<String>
    */
-  @PostMapping("/start")
+  @PostMapping("start")
   public ResponseEntity<String> start() {
     log.info("Start");
     ticketingService.start();
@@ -36,7 +36,7 @@ public class TicketingController {
    *
    * @return ResponseEntity<String>
    */
-  @PostMapping("/stop")
+  @PostMapping("stop")
   public ResponseEntity<String> stop() {
     log.info("Stop");
     ticketingService.stop();

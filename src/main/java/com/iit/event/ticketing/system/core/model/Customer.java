@@ -1,6 +1,7 @@
 package com.iit.event.ticketing.system.core.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Slf4j
 public class Customer implements Runnable {
 
