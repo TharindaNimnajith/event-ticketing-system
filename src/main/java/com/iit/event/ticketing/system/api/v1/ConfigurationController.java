@@ -1,16 +1,19 @@
 package com.iit.event.ticketing.system.api.v1;
 
 import com.iit.event.ticketing.system.configuration.ticketing.TicketingConfiguration;
+import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.service.ConfigurationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Configuration Controller
+ * Ticketing Configuration Controller
  */
 @RestController
 @RequestMapping("v1/configs")
@@ -21,20 +24,27 @@ public class ConfigurationController {
   private final ConfigurationService configurationService;
 
   /**
-   * Get configurations
+   * Get ticketing configurations
    *
-   * @return ResponseEntity<TicketingConfiguration>
+   * @return ResponseEntity containing ApiResponse with TicketingConfiguration
    */
   @GetMapping
-  public ResponseEntity<TicketingConfiguration> getConfigurations() {
-    log.info("Get configurations");
+  public ResponseEntity<ApiResponse<TicketingConfiguration>> getConfigurations() {
+    log.info("Get ticketing configurations");
+    ApiResponse<TicketingConfiguration> apiResponse = configurationService.getConfigurations();
+    return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
+  }
 
-    TicketingConfiguration ticketingConfiguration = configurationService.getConfigurations();
-
-    if (ticketingConfiguration != null) {
-      return ResponseEntity.ok(ticketingConfiguration);
-    } else {
-      return ResponseEntity.status(500).body(null);
-    }
+  /**
+   * Add ticketing configurations
+   *
+   * @param ticketingConfiguration TicketingConfiguration
+   * @return ResponseEntity containing ApiResponse
+   */
+  @PostMapping
+  public ResponseEntity<ApiResponse<Object>> addConfigurations(final @RequestBody TicketingConfiguration ticketingConfiguration) {
+    log.info("Add ticketing configurations");
+    ApiResponse<Object> apiResponse = configurationService.addConfigurations(ticketingConfiguration);
+    return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 }

@@ -1,5 +1,6 @@
 package com.iit.event.ticketing.system.api.v1;
 
+import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.service.TicketingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,26 +21,26 @@ public class TicketingController {
   private final TicketingService ticketingService;
 
   /**
-   * Start
+   * Start simulation
    *
-   * @return ResponseEntity<String>
+   * @return ResponseEntity containing ApiResponse
    */
   @PostMapping("start")
-  public ResponseEntity<String> start() {
-    log.info("Start");
-    ticketingService.start();
-    return ResponseEntity.ok("Started");
+  public ResponseEntity<ApiResponse<Object>> start() {
+    log.info("Start simulation");
+    ApiResponse<Object> apiResponse = ticketingService.start();
+    return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 
   /**
-   * Stop
+   * Stop simulation
    *
-   * @return ResponseEntity<String>
+   * @return ResponseEntity containing ApiResponse
    */
   @PostMapping("stop")
-  public ResponseEntity<String> stop() {
-    log.info("Stop");
-    ticketingService.stop();
-    return ResponseEntity.ok("Stopped");
+  public ResponseEntity<ApiResponse<Object>> stop() {
+    log.info("Stop simulation");
+    ApiResponse<Object> apiResponse = ticketingService.stop();
+    return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 }
