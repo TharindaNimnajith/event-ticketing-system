@@ -26,6 +26,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
     Scanner scanner = new Scanner(System.in);
     TicketingConfiguration ticketingConfiguration = new TicketingConfiguration();
 
+    // Get user inputs for ticketing configurations
     log.info("\nEnter Ticketing Configurations:");
 
     String promptMaxTicketCapacity = "Max Ticket Capacity:";
