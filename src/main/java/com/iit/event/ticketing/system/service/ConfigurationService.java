@@ -5,6 +5,7 @@ import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONF
 import com.iit.event.ticketing.system.configuration.ticketing.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.util.FileUtils;
+import com.iit.event.ticketing.system.util.ValidationUtils;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +45,14 @@ public class ConfigurationService {
    * @param ticketingConfiguration TicketingConfiguration
    * @return ApiResponse (Not null)
    */
-  public @NonNull ApiResponse<Object> addConfigurations(final TicketingConfiguration ticketingConfiguration) {
+  public @NonNull ApiResponse<Object> addConfigurations(final @NonNull TicketingConfiguration ticketingConfiguration) {
     log.debug("Add ticketing configurations");
+
+    List<String> errors = ValidationUtils.validateTicketingConfigurations(ticketingConfiguration);
+
+    if (!errors.isEmpty()) {
+      return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Ticketing configuration validations failed", errors);
+    }
 
     try {
       FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);

@@ -8,6 +8,7 @@ import com.iit.event.ticketing.system.configuration.ticketing.TicketingConfigura
 import java.io.File;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
 
 /**
  * File Utils
@@ -30,7 +31,7 @@ public class FileUtils {
    * @param ticketingConfiguration TicketingConfiguration
    * @throws IOException IOException
    */
-  public static void saveTicketingConfigurationsToFile(final TicketingConfiguration ticketingConfiguration) throws IOException {
+  public static void saveTicketingConfigurationsToFile(final @NonNull TicketingConfiguration ticketingConfiguration) throws IOException {
     ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
     writer.writeValue(new File(TICKETING_CONFIG_FILE_PATH), ticketingConfiguration);
     log.debug("Ticketing configurations saved to file ({})", TICKETING_CONFIG_FILE_PATH);
@@ -42,7 +43,7 @@ public class FileUtils {
    * @return TicketingConfiguration
    * @throws IOException IOException
    */
-  public static TicketingConfiguration loadTicketingConfigurationsFromFile() throws IOException {
+  public static @NonNull TicketingConfiguration loadTicketingConfigurationsFromFile() throws IOException {
     TicketingConfiguration ticketingConfiguration = objectMapper.readValue(new File(TICKETING_CONFIG_FILE_PATH), TicketingConfiguration.class);
     log.debug("Ticketing configurations loaded from file ({})", TICKETING_CONFIG_FILE_PATH);
     return ticketingConfiguration;

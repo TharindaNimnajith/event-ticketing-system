@@ -5,6 +5,7 @@ import com.iit.event.ticketing.system.service.TicketingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ public class TicketingController {
    * @return ResponseEntity containing ApiResponse
    */
   @PostMapping("start")
-  public ResponseEntity<ApiResponse<Object>> start() {
+  public @NonNull ResponseEntity<ApiResponse<Object>> start() {
     log.info("Start simulation");
     ApiResponse<Object> apiResponse = ticketingService.start();
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
@@ -38,7 +39,7 @@ public class TicketingController {
    * @return ResponseEntity containing ApiResponse
    */
   @PostMapping("stop")
-  public ResponseEntity<ApiResponse<Object>> stop() {
+  public @NonNull ResponseEntity<ApiResponse<Object>> stop() {
     log.info("Stop simulation");
     ApiResponse<Object> apiResponse = ticketingService.stop();
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
