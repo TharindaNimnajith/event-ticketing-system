@@ -29,7 +29,7 @@ public class ConfigurationController {
   /**
    * Get ticketing configurations
    *
-   * @return ResponseEntity containing ApiResponse with TicketingConfiguration
+   * @return ResponseEntity containing ApiResponse with TicketingConfiguration (Not null)
    */
   @GetMapping
   public @NonNull ResponseEntity<ApiResponse<TicketingConfiguration>> getConfigurations() {
@@ -41,11 +41,11 @@ public class ConfigurationController {
   /**
    * Add ticketing configurations
    *
-   * @param ticketingConfiguration TicketingConfiguration
-   * @return ResponseEntity containing ApiResponse
+   * @param ticketingConfiguration TicketingConfiguration (Not null)
+   * @return ResponseEntity containing ApiResponse (Not null)
    */
   @PostMapping
-  public @NonNull ResponseEntity<ApiResponse<Object>> addConfigurations(final @RequestBody @Valid @NotNull TicketingConfiguration ticketingConfiguration) {
+  public @NonNull ResponseEntity<ApiResponse<Object>> addConfigurations(final @RequestBody @Valid @NonNull TicketingConfiguration ticketingConfiguration) {
     log.info("Add ticketing configurations");
     ApiResponse<Object> apiResponse = configurationService.addConfigurations(ticketingConfiguration);
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());

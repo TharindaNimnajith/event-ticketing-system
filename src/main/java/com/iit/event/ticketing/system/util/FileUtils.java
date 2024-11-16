@@ -28,7 +28,7 @@ public class FileUtils {
   /**
    * Write TicketingConfiguration object to a JSON file
    *
-   * @param ticketingConfiguration TicketingConfiguration
+   * @param ticketingConfiguration TicketingConfiguration (Not null)
    * @throws IOException IOException
    */
   public static void saveTicketingConfigurationsToFile(final @NonNull TicketingConfiguration ticketingConfiguration) throws IOException {
@@ -40,7 +40,7 @@ public class FileUtils {
   /**
    * Read JSON file into TicketingConfiguration object
    *
-   * @return TicketingConfiguration
+   * @return TicketingConfiguration (Not null)
    * @throws IOException IOException
    */
   public static @NonNull TicketingConfiguration loadTicketingConfigurationsFromFile() throws IOException {

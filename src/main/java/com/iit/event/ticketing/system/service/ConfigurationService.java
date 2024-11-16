@@ -42,7 +42,7 @@ public class ConfigurationService {
   /**
    * Add ticketing configurations
    *
-   * @param ticketingConfiguration TicketingConfiguration
+   * @param ticketingConfiguration TicketingConfiguration (Not null)
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addConfigurations(final @NonNull TicketingConfiguration ticketingConfiguration) {

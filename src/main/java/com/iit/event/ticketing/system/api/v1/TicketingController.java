@@ -24,7 +24,7 @@ public class TicketingController {
   /**
    * Start simulation
    *
-   * @return ResponseEntity containing ApiResponse
+   * @return ResponseEntity containing ApiResponse (Not null)
    */
   @PostMapping("start")
   public @NonNull ResponseEntity<ApiResponse<Object>> start() {
@@ -36,7 +36,7 @@ public class TicketingController {
   /**
    * Stop simulation
    *
-   * @return ResponseEntity containing ApiResponse
+   * @return ResponseEntity containing ApiResponse (Not null)
    */
   @PostMapping("stop")
   public @NonNull ResponseEntity<ApiResponse<Object>> stop() {

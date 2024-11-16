@@ -20,7 +20,7 @@ public class ValidationUtils {
   /**
    * Validate ticketing configurations
    *
-   * @param ticketingConfiguration TicketingConfiguration
+   * @param ticketingConfiguration TicketingConfiguration (Not null)
    * @return String list of errors (Not null)
    */
   public static @NonNull List<String> validateTicketingConfigurations(final @NonNull TicketingConfiguration ticketingConfiguration) {
