@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 
 /**
  * Custom API Response
@@ -37,10 +38,10 @@ public class ApiResponse<T> {
   /**
    * ApiResponse constructor for successful responses without data
    *
-   * @param httpStatus HttpStatus
-   * @param message    Message
+   * @param httpStatus HttpStatus (Not null)
+   * @param message    Message (Not null)
    */
-  public ApiResponse(final HttpStatus httpStatus, final String message) {
+  public ApiResponse(final @NonNull HttpStatus httpStatus, final @NonNull String message) {
     this.httpStatus = httpStatus;
     this.message = message;
   }
@@ -48,11 +49,11 @@ public class ApiResponse<T> {
   /**
    * ApiResponse constructor for successful responses with data
    *
-   * @param httpStatus HttpStatus
-   * @param message    Message
-   * @param data       Data
+   * @param httpStatus HttpStatus (Not null)
+   * @param message    Message (Not null)
+   * @param data       Data (Not null)
    */
-  public ApiResponse(final HttpStatus httpStatus, final String message, final T data) {
+  public ApiResponse(final @NonNull HttpStatus httpStatus, final @NonNull String message, final @NonNull T data) {
     this.httpStatus = httpStatus;
     this.message = message;
     this.data = data;
@@ -61,11 +62,11 @@ public class ApiResponse<T> {
   /**
    * ApiResponse constructor for failure responses
    *
-   * @param httpStatus HttpStatus
-   * @param message    Message
-   * @param errors     Errors
+   * @param httpStatus HttpStatus (Not null)
+   * @param message    Message (Not null)
+   * @param errors     Errors (Not null)
    */
-  public ApiResponse(final HttpStatus httpStatus, final String message, final List<String> errors) {
+  public ApiResponse(final @NonNull HttpStatus httpStatus, final @NonNull String message, final @NonNull List<String> errors) {
     this.httpStatus = httpStatus;
     this.message = message;
     this.errors = errors;

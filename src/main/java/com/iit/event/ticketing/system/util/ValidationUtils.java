@@ -26,12 +26,11 @@ public class ValidationUtils {
   public static @NonNull List<String> validateTicketingConfigurations(final @NonNull TicketingConfiguration ticketingConfiguration) {
     List<String> errors = new ArrayList<>();
 
-    if (ticketingConfiguration.getTotalTickets() > ticketingConfiguration.getMaxTicketCapacity()) {
-      errors.add(String.format(
-          "Total Tickets (%d) should not be greater than Max Ticket Capacity (%d)",
-          ticketingConfiguration.getTotalTickets(),
-          ticketingConfiguration.getMaxTicketCapacity()
-      ));
+    int totalTickets = ticketingConfiguration.getTotalTickets();
+    int maxTicketCapacity = ticketingConfiguration.getMaxTicketCapacity();
+
+    if (totalTickets > maxTicketCapacity) {
+      errors.add(String.format("Total Tickets (%d) should not be greater than Max Ticket Capacity (%d)", totalTickets, maxTicketCapacity));
     }
 
     return errors;
