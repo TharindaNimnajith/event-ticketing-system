@@ -21,10 +21,18 @@ public class ValidationUtils {
    * Validate ticketing configurations
    *
    * @param ticketingConfiguration TicketingConfiguration (Not null)
-   * @return String list of errors (Not null)
+   * @return List of error messages if one or more validation failures found, otherwise empty list (Not null)
    */
   public static @NonNull List<String> validateTicketingConfigurations(final @NonNull TicketingConfiguration ticketingConfiguration) {
     List<String> errors = new ArrayList<>();
+
+    if (ticketingConfiguration.getTotalTickets() > ticketingConfiguration.getMaxTicketCapacity()) {
+      errors.add(String.format(
+          "Total Tickets (%d) should not be greater than Max Ticket Capacity (%d)",
+          ticketingConfiguration.getTotalTickets(),
+          ticketingConfiguration.getMaxTicketCapacity()
+      ));
+    }
 
     return errors;
   }

@@ -60,20 +60,20 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
   }
 
   /**
-   * <p> Validate to ensure that Total Tickets user input is a positive integer not greater than Max Tickets Capacity </p>
+   * <p> Validate to ensure that Total Tickets user input is a positive integer not greater than Max Ticket Capacity </p>
    * <p> Otherwise prompt again with a relevant error message </p>
    *
-   * @param scanner            Scanner
-   * @param prompt             Prompt
-   * @param maxTicketsCapacity Max Tickets Capacity
+   * @param scanner           Scanner
+   * @param prompt            Prompt
+   * @param maxTicketCapacity Max Ticket Capacity
    * @return Valid Total Tickets input
    */
-  private int validateInput(final Scanner scanner, final String prompt, final int maxTicketsCapacity) {
+  private int validateInput(final Scanner scanner, final String prompt, final int maxTicketCapacity) {
     int totalTickets = validateInput(scanner, prompt);
 
-    // Check if Total Tickets user input is not greater than Max Tickets Capacity
-    while (totalTickets > maxTicketsCapacity) {
-      log.warn("\nIncorrect Input - Total Tickets should be less than Max Ticket Capacity ({})", maxTicketsCapacity);
+    // Check if Total Tickets user input is not greater than Max Ticket Capacity
+    while (totalTickets > maxTicketCapacity) {
+      log.warn("\nIncorrect Input - Total Tickets ({}) should not be greater than Max Ticket Capacity ({})", totalTickets, maxTicketCapacity);
       totalTickets = validateInput(scanner, prompt);
     }
 
@@ -100,11 +100,11 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
         if (input > 0) {
           return input;
         } else {
-          log.warn("\nIncorrect Input - Value should be greater than 0");
+          log.warn("\nIncorrect Input ({}) - Value should be greater than 0", input);
         }
       } else {
-        log.warn("\nIncorrect Input - Value should be an integer");
-        scanner.next(); // Consuming invalid input
+        // Consuming invalid input
+        log.warn("\nIncorrect Input ({}) - Value should be an integer", scanner.next());
       }
     }
   }
