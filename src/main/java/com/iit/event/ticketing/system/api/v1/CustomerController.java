@@ -1,6 +1,5 @@
 package com.iit.event.ticketing.system.api.v1;
 
-import com.iit.event.ticketing.system.configuration.ticketing.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.Customer;
 import com.iit.event.ticketing.system.service.CustomerService;
