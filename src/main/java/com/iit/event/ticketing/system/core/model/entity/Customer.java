@@ -1,12 +1,13 @@
 package com.iit.event.ticketing.system.core.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.iit.event.ticketing.system.service.TicketPool;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -14,13 +15,15 @@ import org.springframework.lang.NonNull;
 /**
  * Customer
  */
-@NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @Builder
 @Slf4j
 public class Customer implements Runnable {
+
+  private final TicketPool ticketPool;
 
   @JsonProperty("customer_id")
   @NotNull

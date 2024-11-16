@@ -1,27 +1,20 @@
-package com.iit.event.ticketing.system.core.model.entity;
+package com.iit.event.ticketing.system.service;
 
+import com.iit.event.ticketing.system.core.model.entity.Ticket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * Ticket Pool
  */
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@Builder
+@Component
 @Slf4j
 public class TicketPool {
 
-  private List<Ticket> ticketList = Collections.synchronizedList(new ArrayList<>());
+  private final List<Ticket> tickets = Collections.synchronizedList(new ArrayList<>());
 
   /**
    * Add tickets

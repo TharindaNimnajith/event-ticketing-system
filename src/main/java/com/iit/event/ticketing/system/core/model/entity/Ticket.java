@@ -1,5 +1,6 @@
 package com.iit.event.ticketing.system.core.model.entity;
 
+import com.iit.event.ticketing.system.core.model.TicketStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,4 +18,7 @@ import lombok.Setter;
 public class Ticket {
 
   private String ticketId;
+  private String vendorId;
+  private String customerId;
+  private TicketStatus ticketStatus;
 }
