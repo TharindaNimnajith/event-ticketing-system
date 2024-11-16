@@ -2,8 +2,8 @@ package com.iit.event.ticketing.system.service;
 
 import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
 
-import com.iit.event.ticketing.system.configuration.ticketing.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
+import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
 import com.iit.event.ticketing.system.util.FileUtils;
 import com.iit.event.ticketing.system.util.ValidationUtils;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ConfigurationService {
+public class TicketingConfigurationService {
 
   /**
    * Add ticketing configurations

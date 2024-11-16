@@ -47,5 +47,14 @@ public class Vendor implements Runnable {
   @Override
   public void run() {
     log.debug("Vendor run");
+
+    //    while (true) {
+    //      ticketPool.addTickets(ticketReleaseRate);
+    //      try {
+    //        Thread.sleep(1000); // Release tickets at intervals
+    //      } catch (InterruptedException e) {
+    //        Thread.currentThread().interrupt();
+    //      }
+    //    }
   }
 }

@@ -1,6 +1,6 @@
 package com.iit.event.ticketing.system.util
 
-import com.iit.event.ticketing.system.configuration.ticketing.TicketingConfiguration
+import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration
 import spock.lang.Specification
 
 /**

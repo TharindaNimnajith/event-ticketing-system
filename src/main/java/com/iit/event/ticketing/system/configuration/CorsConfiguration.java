@@ -1,4 +1,4 @@
-package com.iit.event.ticketing.system.configuration.cors;
+package com.iit.event.ticketing.system.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

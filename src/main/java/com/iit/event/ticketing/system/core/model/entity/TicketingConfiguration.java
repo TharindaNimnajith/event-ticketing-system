@@ -1,4 +1,4 @@
-package com.iit.event.ticketing.system.configuration.ticketing;
+package com.iit.event.ticketing.system.core.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;

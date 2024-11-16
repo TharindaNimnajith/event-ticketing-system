@@ -1,8 +1,8 @@
 package com.iit.event.ticketing.system.api.v1;
 
-import com.iit.event.ticketing.system.configuration.ticketing.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
-import com.iit.event.ticketing.system.service.ConfigurationService;
+import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
+import com.iit.event.ticketing.system.service.TicketingConfigurationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("v1/configs")
 @RequiredArgsConstructor
 @Slf4j
-public class ConfigurationController {
+public class TicketingConfigurationController {
 
-  private final ConfigurationService configurationService;
+  private final TicketingConfigurationService ticketingConfigurationService;
 
   /**
    * Add ticketing configurations
@@ -34,7 +34,7 @@ public class ConfigurationController {
   @PostMapping
   public @NonNull ResponseEntity<ApiResponse<Object>> addConfigurations(final @RequestBody @Valid @NonNull TicketingConfiguration ticketingConfiguration) {
     log.info("Add ticketing configurations");
-    ApiResponse<Object> apiResponse = configurationService.addConfigurations(ticketingConfiguration);
+    ApiResponse<Object> apiResponse = ticketingConfigurationService.addConfigurations(ticketingConfiguration);
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 
@@ -46,7 +46,7 @@ public class ConfigurationController {
   @GetMapping
   public @NonNull ResponseEntity<ApiResponse<TicketingConfiguration>> getConfigurations() {
     log.info("Get ticketing configurations");
-    ApiResponse<TicketingConfiguration> apiResponse = configurationService.getConfigurations();
+    ApiResponse<TicketingConfiguration> apiResponse = ticketingConfigurationService.getConfigurations();
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 }

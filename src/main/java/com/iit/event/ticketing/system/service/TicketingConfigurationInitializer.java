@@ -1,7 +1,8 @@
-package com.iit.event.ticketing.system.configuration.ticketing;
+package com.iit.event.ticketing.system.service;
 
 import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
 
+import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
 import com.iit.event.ticketing.system.util.FileUtils;
 import java.io.IOException;
 import java.util.Scanner;
