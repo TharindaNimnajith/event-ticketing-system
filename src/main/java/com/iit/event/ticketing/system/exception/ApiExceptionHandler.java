@@ -36,7 +36,7 @@ public class ApiExceptionHandler {
     // Create a standardized response
     ApiResponse<Object> response = new ApiResponse<>(HttpStatus.BAD_REQUEST, "Validation error", errors);
 
-    return ResponseEntity.badRequest().body(response);
+    return ResponseEntity.badRequest().body(response); // HttpStatus.BAD_REQUEST (400)
   }
 
   /**
@@ -52,6 +52,6 @@ public class ApiExceptionHandler {
     // Create a standardized response
     ApiResponse<Object> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", List.of(ex.getMessage()));
 
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // 500
   }
 }

@@ -1,12 +1,13 @@
 package com.iit.event.ticketing.system.util;
 
+import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIG_FILE_PATH;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.iit.event.ticketing.system.configuration.ticketing.TicketingConfiguration;
 import java.io.File;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.NonNull;
 
 /**
  * File Utils
@@ -14,7 +15,6 @@ import org.springframework.lang.NonNull;
 @Slf4j
 public class FileUtils {
 
-  private static final String TICKETING_CONFIG_FILE_PATH = "ticketing-configurations.json";
   private static final ObjectMapper objectMapper = new ObjectMapper();
 
   /**
@@ -28,30 +28,23 @@ public class FileUtils {
    * Write TicketingConfiguration object to a JSON file
    *
    * @param ticketingConfiguration TicketingConfiguration
+   * @throws IOException IOException
    */
-  public static void saveTicketingConfigurationsToFile(final TicketingConfiguration ticketingConfiguration) {
-    try {
-      ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
-      writer.writeValue(new File(TICKETING_CONFIG_FILE_PATH), ticketingConfiguration);
-      log.debug("Ticketing configurations saved to file ({})", TICKETING_CONFIG_FILE_PATH);
-    } catch (IOException ex) {
-      log.error("Error while saving ticketing configurations to file ({}) - Error: {}", TICKETING_CONFIG_FILE_PATH, ex.getMessage(), ex);
-    }
+  public static void saveTicketingConfigurationsToFile(final TicketingConfiguration ticketingConfiguration) throws IOException {
+    ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
+    writer.writeValue(new File(TICKETING_CONFIG_FILE_PATH), ticketingConfiguration);
+    log.debug("Ticketing configurations saved to file ({})", TICKETING_CONFIG_FILE_PATH);
   }
 
   /**
    * Read JSON file into TicketingConfiguration object
    *
-   * @return TicketingConfiguration (Not null)
+   * @return TicketingConfiguration
+   * @throws IOException IOException
    */
-  public static @NonNull TicketingConfiguration loadTicketingConfigurationsFromFile() {
-    try {
-      TicketingConfiguration ticketingConfiguration = objectMapper.readValue(new File(TICKETING_CONFIG_FILE_PATH), TicketingConfiguration.class);
-      log.debug("Ticketing configurations loaded from file ({})", TICKETING_CONFIG_FILE_PATH);
-      return ticketingConfiguration;
-    } catch (IOException ex) {
-      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIG_FILE_PATH, ex.getMessage(), ex);
-      return new TicketingConfiguration();
-    }
+  public static TicketingConfiguration loadTicketingConfigurationsFromFile() throws IOException {
+    TicketingConfiguration ticketingConfiguration = objectMapper.readValue(new File(TICKETING_CONFIG_FILE_PATH), TicketingConfiguration.class);
+    log.debug("Ticketing configurations loaded from file ({})", TICKETING_CONFIG_FILE_PATH);
+    return ticketingConfiguration;
   }
 }

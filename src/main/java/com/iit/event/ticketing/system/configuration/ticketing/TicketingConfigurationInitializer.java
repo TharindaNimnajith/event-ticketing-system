@@ -1,6 +1,9 @@
 package com.iit.event.ticketing.system.configuration.ticketing;
 
+import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIG_FILE_PATH;
+
 import com.iit.event.ticketing.system.util.FileUtils;
+import java.io.IOException;
 import java.util.Scanner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +49,11 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
     ticketingConfiguration.setCustomerRetrievalRate(customerRetrievalRate);
 
     // Save ticketing configurations to file
-    FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
+    try {
+      FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
+    } catch (IOException ex) {
+      log.error("Error while saving ticketing configurations to file ({}) - Error: {}", TICKETING_CONFIG_FILE_PATH, ex.getMessage(), ex);
+    }
 
     // Print loaded ticketing configurations from file to console
     printTicketingConfigurations();
@@ -106,13 +113,17 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
    * Print ticketing configurations loaded from file
    */
   private void printTicketingConfigurations() {
-    TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
+    try {
+      TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
 
-    log.info("\nTicketing Configurations:\n{}: {}\n{}: {}\n{}: {}\n{}: {}",
-        "Max Ticket Capacity", ticketingConfiguration.getMaxTicketCapacity(),
-        "Total Tickets", ticketingConfiguration.getTotalTickets(),
-        "Ticket Release Rate (In Milliseconds)", ticketingConfiguration.getTicketReleaseRate(),
-        "Customer Retrieval Rate (In Milliseconds)", ticketingConfiguration.getCustomerRetrievalRate()
-    );
+      log.info("\nTicketing Configurations:\n{}: {}\n{}: {}\n{}: {}\n{}: {}",
+          "Max Ticket Capacity", ticketingConfiguration.getMaxTicketCapacity(),
+          "Total Tickets", ticketingConfiguration.getTotalTickets(),
+          "Ticket Release Rate (In Milliseconds)", ticketingConfiguration.getTicketReleaseRate(),
+          "Customer Retrieval Rate (In Milliseconds)", ticketingConfiguration.getCustomerRetrievalRate()
+      );
+    } catch (IOException ex) {
+      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIG_FILE_PATH, ex.getMessage(), ex);
+    }
   }
 }
