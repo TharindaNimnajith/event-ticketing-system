@@ -1,6 +1,6 @@
 package com.iit.event.ticketing.system.configuration.ticketing;
 
-import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIG_FILE_PATH;
+import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
 
 import com.iit.event.ticketing.system.util.FileUtils;
 import java.io.IOException;
@@ -52,7 +52,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
     try {
       FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
     } catch (IOException ex) {
-      log.error("Error while saving ticketing configurations to file ({}) - Error: {}", TICKETING_CONFIG_FILE_PATH, ex.getMessage(), ex);
+      log.error("Error while saving ticketing configurations to file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
     }
 
     // Print loaded ticketing configurations from file to console
@@ -123,7 +123,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
           "Customer Retrieval Rate (In Milliseconds)", ticketingConfiguration.getCustomerRetrievalRate()
       );
     } catch (IOException ex) {
-      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIG_FILE_PATH, ex.getMessage(), ex);
+      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
     }
   }
 }

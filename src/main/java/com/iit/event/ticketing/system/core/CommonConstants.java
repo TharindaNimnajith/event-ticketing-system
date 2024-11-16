@@ -5,7 +5,7 @@ package com.iit.event.ticketing.system.core;
  */
 public class CommonConstants {
 
-  public static final String TICKETING_CONFIG_FILE_PATH = "ticketing-configurations.json";
+  public static final String TICKETING_CONFIGURATIONS_FILE_PATH = "ticketing-configurations.json";
 
   /**
    * Private constructor to hide the implicit public constructor

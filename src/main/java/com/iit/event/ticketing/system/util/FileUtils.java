@@ -1,6 +1,6 @@
 package com.iit.event.ticketing.system.util;
 
-import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIG_FILE_PATH;
+import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -33,8 +33,8 @@ public class FileUtils {
    */
   public static void saveTicketingConfigurationsToFile(final @NonNull TicketingConfiguration ticketingConfiguration) throws IOException {
     ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
-    writer.writeValue(new File(TICKETING_CONFIG_FILE_PATH), ticketingConfiguration);
-    log.debug("Ticketing configurations saved to file ({})", TICKETING_CONFIG_FILE_PATH);
+    writer.writeValue(new File(TICKETING_CONFIGURATIONS_FILE_PATH), ticketingConfiguration);
+    log.debug("Ticketing configurations saved to file ({})", TICKETING_CONFIGURATIONS_FILE_PATH);
   }
 
   /**
@@ -44,8 +44,8 @@ public class FileUtils {
    * @throws IOException IOException
    */
   public static @NonNull TicketingConfiguration loadTicketingConfigurationsFromFile() throws IOException {
-    TicketingConfiguration ticketingConfiguration = objectMapper.readValue(new File(TICKETING_CONFIG_FILE_PATH), TicketingConfiguration.class);
-    log.debug("Ticketing configurations loaded from file ({})", TICKETING_CONFIG_FILE_PATH);
+    TicketingConfiguration ticketingConfiguration = objectMapper.readValue(new File(TICKETING_CONFIGURATIONS_FILE_PATH), TicketingConfiguration.class);
+    log.debug("Ticketing configurations loaded from file ({})", TICKETING_CONFIGURATIONS_FILE_PATH);
     return ticketingConfiguration;
   }
 }

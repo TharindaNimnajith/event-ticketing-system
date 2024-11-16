@@ -51,7 +51,7 @@ public class ApiExceptionHandler {
     log.error(ex.getMessage(), ex);
 
     // Create a standardized response
-    ApiResponse<Object> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", List.of(ex.getMessage()));
+    ApiResponse<Object> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error", List.of(ex.getMessage()));
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // 500
   }
