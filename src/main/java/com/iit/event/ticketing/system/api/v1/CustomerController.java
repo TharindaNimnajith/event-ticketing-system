@@ -2,8 +2,10 @@ package com.iit.event.ticketing.system.api.v1;
 
 import com.iit.event.ticketing.system.configuration.ticketing.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
-import com.iit.event.ticketing.system.service.ConfigurationService;
+import com.iit.event.ticketing.system.core.model.entity.Customer;
+import com.iit.event.ticketing.system.service.CustomerService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,38 +17,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Ticketing Configuration Controller
+ * Customer Controller
  */
 @RestController
-@RequestMapping("v1/configs")
+@RequestMapping("v1/customers")
 @RequiredArgsConstructor
 @Slf4j
-public class ConfigurationController {
+public class CustomerController {
 
-  private final ConfigurationService configurationService;
+  private final CustomerService customerService;
 
   /**
-   * Add ticketing configurations
+   * Add customer
    *
-   * @param ticketingConfiguration TicketingConfiguration (Not null)
+   * @param customer Customer (Not null)
    * @return ResponseEntity containing ApiResponse (Not null)
    */
   @PostMapping
-  public @NonNull ResponseEntity<ApiResponse<Object>> addConfigurations(final @RequestBody @Valid @NonNull TicketingConfiguration ticketingConfiguration) {
-    log.info("Add ticketing configurations");
-    ApiResponse<Object> apiResponse = configurationService.addConfigurations(ticketingConfiguration);
+  public @NonNull ResponseEntity<ApiResponse<Object>> addCustomer(final @RequestBody @Valid @NonNull Customer customer) {
+    log.info("Add customer");
+    ApiResponse<Object> apiResponse = customerService.addCustomer(customer);
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 
   /**
-   * Get ticketing configurations
+   * Get customer
    *
-   * @return ResponseEntity containing ApiResponse with TicketingConfiguration (Not null)
+   * @return ResponseEntity containing ApiResponse with List of Customer objects (Not null)
    */
   @GetMapping
-  public @NonNull ResponseEntity<ApiResponse<TicketingConfiguration>> getConfigurations() {
-    log.info("Get ticketing configurations");
-    ApiResponse<TicketingConfiguration> apiResponse = configurationService.getConfigurations();
+  public @NonNull ResponseEntity<ApiResponse<List<Customer>>> getCustomer() {
+    log.info("Get customers");
+    ApiResponse<List<Customer>> apiResponse = customerService.getCustomers();
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 }

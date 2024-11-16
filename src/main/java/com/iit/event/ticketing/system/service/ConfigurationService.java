@@ -23,23 +23,6 @@ import org.springframework.stereotype.Service;
 public class ConfigurationService {
 
   /**
-   * Get ticketing configurations
-   *
-   * @return ApiResponse containing TicketingConfiguration (Not null)
-   */
-  public @NonNull ApiResponse<TicketingConfiguration> getConfigurations() {
-    log.debug("Get ticketing configurations");
-
-    try {
-      TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
-      return new ApiResponse<>(HttpStatus.OK, "Ticketing configurations fetched successfully", ticketingConfiguration);
-    } catch (IOException ex) {
-      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
-      return new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch ticketing configurations", List.of(ex.getMessage()));
-    }
-  }
-
-  /**
    * Add ticketing configurations
    *
    * @param ticketingConfiguration TicketingConfiguration (Not null)
@@ -60,6 +43,23 @@ public class ConfigurationService {
     } catch (IOException ex) {
       log.error("Error while saving ticketing configurations to file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
       return new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save ticketing configurations", List.of(ex.getMessage()));
+    }
+  }
+
+  /**
+   * Get ticketing configurations
+   *
+   * @return ApiResponse containing TicketingConfiguration (Not null)
+   */
+  public @NonNull ApiResponse<TicketingConfiguration> getConfigurations() {
+    log.debug("Get ticketing configurations");
+
+    try {
+      TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
+      return new ApiResponse<>(HttpStatus.OK, "Ticketing configurations fetched successfully", ticketingConfiguration);
+    } catch (IOException ex) {
+      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
+      return new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch ticketing configurations", List.of(ex.getMessage()));
     }
   }
 }
