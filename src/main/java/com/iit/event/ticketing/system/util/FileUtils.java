@@ -7,23 +7,19 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
 import java.io.File;
 import java.io.IOException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 
 /**
  * File Utils
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class FileUtils {
 
   private static final ObjectMapper objectMapper = new ObjectMapper();
-
-  /**
-   * Private constructor to hide the implicit public constructor
-   */
-  private FileUtils() {
-    // No instantiation
-  }
 
   /**
    * Write TicketingConfiguration object to a JSON file

@@ -8,7 +8,6 @@ import com.iit.event.ticketing.system.util.FileUtils;
 import com.iit.event.ticketing.system.util.ValidationUtils;
 import java.io.IOException;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
  * Ticketing Configuration Service
  */
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class TicketingConfigurationService {
 

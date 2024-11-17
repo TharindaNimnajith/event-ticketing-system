@@ -3,19 +3,15 @@ package com.iit.event.ticketing.system.util;
 import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 /**
  * Validation Utils
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValidationUtils {
-
-  /**
-   * Private constructor to hide the implicit public constructor
-   */
-  private ValidationUtils() {
-    // No instantiation
-  }
 
   /**
    * Validate ticketing configurations

@@ -7,7 +7,6 @@ import com.iit.event.ticketing.system.util.FileUtils;
 import java.io.IOException;
 import java.util.Scanner;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
  * Initialize TicketingConfiguration by prompting user to input values at application startup
  */
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class TicketingConfigurationInitializer implements ApplicationRunner {
 
