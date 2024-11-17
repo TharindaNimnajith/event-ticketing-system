@@ -53,4 +53,13 @@ public class CustomerService {
     log.debug("Get customers");
     return new ApiResponse<>(HttpStatus.OK, "Customers fetched successfully", customers);
   }
+
+  /**
+   * Get customer count
+   *
+   * @return Customer count
+   */
+  public int getCustomerCount() {
+    return customers.size();
+  }
 }

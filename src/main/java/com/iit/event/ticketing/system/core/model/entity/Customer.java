@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iit.event.ticketing.system.service.TicketPool;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -16,22 +15,24 @@ import org.springframework.lang.NonNull;
  */
 @RequiredArgsConstructor
 @Getter
-@Setter
-@Builder
 @Slf4j
 public class Customer implements Runnable {
 
   private final TicketPool ticketPool;
 
-  @JsonProperty("customer_id")
+  @JsonProperty("id")
+  @NonNull
+  private String id;
+
+  @JsonProperty("name")
   @NotNull
   @NonNull
-  private String customerId;
+  private String name;
 
   @JsonProperty("retrieval_interval")
-  @NonNull
   @Positive
-  private Integer retrievalInterval;
+  @Setter
+  private int retrievalInterval;
 
   /**
    * Execute customer functionality

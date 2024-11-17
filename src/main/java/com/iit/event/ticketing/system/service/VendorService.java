@@ -53,4 +53,13 @@ public class VendorService {
     log.debug("Get vendors");
     return new ApiResponse<>(HttpStatus.OK, "Vendors fetched successfully", vendors);
   }
+
+  /**
+   * Get vendor count
+   *
+   * @return Vendor count
+   */
+  public int getVendorCount() {
+    return vendors.size();
+  }
 }

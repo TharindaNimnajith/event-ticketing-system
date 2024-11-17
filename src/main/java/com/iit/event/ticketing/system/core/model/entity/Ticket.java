@@ -3,27 +3,22 @@ package com.iit.event.ticketing.system.core.model.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iit.event.ticketing.system.core.model.TicketStatus;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.lang.NonNull;
 
 /**
  * Ticket
  */
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Setter
-@Builder
 public class Ticket {
 
-  @JsonProperty("ticket_id")
+  @JsonProperty("id")
   @NotNull
   @NonNull
-  private String ticketId;
+  private String id;
 
   @JsonProperty("vendor_id")
   @NotNull
@@ -33,20 +28,20 @@ public class Ticket {
   @JsonProperty("customer_id")
   private String customerId;
 
-  @JsonProperty("ticket_status")
+  @JsonProperty("status")
   @NotNull
   @NonNull
-  private TicketStatus ticketStatus;
+  private TicketStatus status;
 
   /**
    * Ticket constructor
    *
-   * @param ticketId Ticket ID
+   * @param id       ID
    * @param vendorId Vendor ID
    */
-  public Ticket(final @NonNull String ticketId, final @NonNull String vendorId) {
-    this.ticketId = ticketId;
+  public Ticket(final @NonNull String id, final @NonNull String vendorId) {
+    this.id = id;
     this.vendorId = vendorId;
-    this.ticketStatus = TicketStatus.AVAILABLE;
+    this.status = TicketStatus.AVAILABLE;
   }
 }

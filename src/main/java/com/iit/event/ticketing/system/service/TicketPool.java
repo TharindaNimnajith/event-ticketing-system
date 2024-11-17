@@ -53,7 +53,7 @@ public class TicketPool {
   public synchronized int getAvailableTicketCount() {
     synchronized (tickets) {
       return (int) tickets.stream()
-          .filter(ticket -> ticket.getTicketStatus() == TicketStatus.AVAILABLE)
+          .filter(ticket -> ticket.getStatus() == TicketStatus.AVAILABLE)
           .count();
     }
   }
