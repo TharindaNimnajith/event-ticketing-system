@@ -6,6 +6,7 @@ import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
 import com.iit.event.ticketing.system.util.FileUtils;
 import java.io.IOException;
 import java.util.Scanner;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -64,12 +65,12 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
    * <p> Validate to ensure that Total Tickets user input is a positive integer not greater than Max Ticket Capacity </p>
    * <p> Otherwise prompt again with a relevant error message </p>
    *
-   * @param scanner           Scanner
-   * @param prompt            Prompt
+   * @param scanner           Scanner (Not null)
+   * @param prompt            Prompt (Not null)
    * @param maxTicketCapacity Max Ticket Capacity
    * @return Valid Total Tickets input
    */
-  private int validateInput(final Scanner scanner, final String prompt, final int maxTicketCapacity) {
+  private int validateInput(final @NonNull Scanner scanner, final @NonNull String prompt, final int maxTicketCapacity) {
     int totalTickets = validateInput(scanner, prompt);
 
     // Check if Total Tickets user input is not greater than Max Ticket Capacity
@@ -85,11 +86,11 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
    * <p> Validate to ensure that user input is a positive integer </p>
    * <p> Otherwise prompt again with a relevant error message </p>
    *
-   * @param scanner Scanner
-   * @param prompt  Prompt
+   * @param scanner Scanner (Not null)
+   * @param prompt  Prompt (Not null)
    * @return Valid input
    */
-  private int validateInput(final Scanner scanner, final String prompt) {
+  private int validateInput(final @NonNull Scanner scanner, final @NonNull String prompt) {
     while (true) {
       log.info("\n{}", prompt);
 

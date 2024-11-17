@@ -39,19 +39,5 @@ public class Customer implements Runnable {
   @Override
   public void run() {
     log.debug("Customer run");
-
-    //    while (true) {
-    //      String ticket = ticketPool.removeTicket();
-    //      if (ticket != null) {
-    //        System.out.println("Customer purchased: " + ticket);
-    //      } else {
-    //        System.out.println("No tickets available.");
-    //      }
-    //      try {
-    //        Thread.sleep(1000); // Attempt to buy tickets at intervals
-    //      } catch (InterruptedException e) {
-    //        Thread.currentThread().interrupt();
-    //      }
-    //    }
   }
 }

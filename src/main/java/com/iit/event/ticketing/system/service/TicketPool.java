@@ -1,6 +1,10 @@
 package com.iit.event.ticketing.system.service;
 
+import com.iit.event.ticketing.system.core.model.TicketStatus;
 import com.iit.event.ticketing.system.core.model.entity.Ticket;
+import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
+import com.iit.event.ticketing.system.util.FileUtils;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,27 +19,23 @@ import org.springframework.stereotype.Component;
 public class TicketPool {
 
   private final List<Ticket> tickets = Collections.synchronizedList(new ArrayList<>());
-  //  private int maxCapacity;
-  //
-  //  public TicketPool(int maxCapacity) {
-  //    this.maxCapacity = maxCapacity;
-  //  }
+  private final int maxCapacity;
+
+  /**
+   * TicketPool constructor
+   *
+   * @throws IOException IOException
+   */
+  public TicketPool() throws IOException {
+    TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
+    this.maxCapacity = ticketingConfiguration.getMaxTicketCapacity();
+  }
 
   /**
    * Add tickets
    */
   public synchronized void addTickets() {
     log.debug("Add tickets");
-
-    //    for (int i = 0; i < ticketCount; i++) {
-    //      if (tickets.size() < 100) {
-    //        tickets.add("Ticket" + (tickets.size() + 1));
-    //        System.out.println("Ticket added. Total tickets: " + tickets.size());
-    //      } else {
-    //        System.out.println("Maximum ticket capacity reached!");
-    //        break;
-    //      }
-    //    }
   }
 
   /**
@@ -43,19 +43,18 @@ public class TicketPool {
    */
   public synchronized void removeTicket() {
     log.debug("Remove ticket");
-
-    //    if (!tickets.isEmpty()) {
-    //      String ticket = tickets.remove(0);
-    //      System.out.println("Ticket purchased: " + ticket);
-    //    }
   }
 
-  //  /**
-  //   * Get ticket count
-  //   *
-  //   * @return Ticket count in the ticket pool
-  //   */
-  //  public int getTicketCount() {
-  //    return tickets.size();
-  //  }
+  /**
+   * Get available ticket count
+   *
+   * @return Available ticket count
+   */
+  public synchronized int getAvailableTicketCount() {
+    synchronized (tickets) {
+      return (int) tickets.stream()
+          .filter(ticket -> ticket.getTicketStatus() == TicketStatus.AVAILABLE)
+          .count();
+    }
+  }
 }
