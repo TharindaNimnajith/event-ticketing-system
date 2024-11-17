@@ -27,8 +27,6 @@ public class TicketingConfigurationService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addConfigurations(final @NonNull TicketingConfiguration ticketingConfiguration) {
-    log.debug("Add ticketing configurations");
-
     List<String> errors = ValidationUtils.validateTicketingConfigurations(ticketingConfiguration);
 
     if (!errors.isEmpty()) {
@@ -50,8 +48,6 @@ public class TicketingConfigurationService {
    * @return ApiResponse containing TicketingConfiguration (Not null)
    */
   public @NonNull ApiResponse<TicketingConfiguration> getConfigurations() {
-    log.debug("Get ticketing configurations");
-
     try {
       TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
       return new ApiResponse<>(HttpStatus.OK, "Ticketing configurations fetched successfully", ticketingConfiguration);

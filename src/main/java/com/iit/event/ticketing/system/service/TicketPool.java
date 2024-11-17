@@ -8,14 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
  * Ticket Pool
  */
 @Component
-@Slf4j
 public class TicketPool {
 
   private final List<Ticket> tickets = Collections.synchronizedList(new ArrayList<>());
@@ -35,14 +33,14 @@ public class TicketPool {
    * Add tickets
    */
   public synchronized void addTickets() {
-    log.debug("Add tickets");
+    // TODO
   }
 
   /**
    * Remove ticket
    */
   public synchronized void removeTicket() {
-    log.debug("Remove ticket");
+    // TODO
   }
 
   /**

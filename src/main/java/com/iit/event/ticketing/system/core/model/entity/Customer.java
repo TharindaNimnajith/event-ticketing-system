@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Positive;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 
@@ -16,7 +15,6 @@ import org.springframework.lang.NonNull;
  * Customer
  */
 @Getter
-@Slf4j
 public class Customer implements Runnable {
 
   private final TicketPool ticketPool;
@@ -55,6 +53,6 @@ public class Customer implements Runnable {
    */
   @Override
   public void run() {
-    log.debug("Customer run");
+    // TODO
   }
 }

@@ -4,7 +4,6 @@ import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.Vendor;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
  * Vendor Service
  */
 @Service
-@Slf4j
 public class VendorService {
 
   private final List<Vendor> vendors = new ArrayList<>();
@@ -25,7 +23,6 @@ public class VendorService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addVendor(final @NonNull Vendor vendor) {
-    log.debug("Add vendor");
     vendors.add(vendor);
     return new ApiResponse<>(HttpStatus.OK, "Vendor added successfully");
   }
@@ -36,7 +33,6 @@ public class VendorService {
    * @return ApiResponse containing List of Vendor objects (Not null)
    */
   public @NonNull ApiResponse<List<Vendor>> getVendors() {
-    log.debug("Get vendors");
     return new ApiResponse<>(HttpStatus.OK, "Vendors fetched successfully", vendors);
   }
 
