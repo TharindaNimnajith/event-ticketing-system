@@ -2,18 +2,20 @@ package com.iit.event.ticketing.system.core.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iit.event.ticketing.system.service.TicketPool;
+import com.iit.event.ticketing.system.util.FileUtils;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.io.IOException;
+import java.util.UUID;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 
 /**
  * Vendor
  */
-@RequiredArgsConstructor
 @Getter
 @Slf4j
 public class Vendor implements Runnable {
@@ -25,7 +27,7 @@ public class Vendor implements Runnable {
   private String id;
 
   @JsonProperty("name")
-  @NotNull
+  @NotBlank
   @NonNull
   private String name;
 
@@ -37,8 +39,25 @@ public class Vendor implements Runnable {
 
   @JsonProperty("release_interval")
   @Positive
-  @Setter
   private int releaseInterval;
+
+  /**
+   * Vendor constructor
+   *
+   * @param name              Name
+   * @param ticketsPerRelease Tickets per release
+   * @param ticketPool        TicketPool
+   * @throws IOException IOException
+   */
+  public Vendor(final @NonNull String name, final @NonNull Integer ticketsPerRelease, final @NonNull TicketPool ticketPool) throws IOException {
+    TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
+
+    this.id = UUID.randomUUID().toString();
+    this.name = StringUtils.trim(name);
+    this.ticketsPerRelease = ticketsPerRelease;
+    this.releaseInterval = ticketingConfiguration.getTicketReleaseRate();
+    this.ticketPool = ticketPool;
+  }
 
   /**
    * Execute vendor functionality

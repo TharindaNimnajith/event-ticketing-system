@@ -1,12 +1,7 @@
 package com.iit.event.ticketing.system.service;
 
-import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
-
 import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.Customer;
-import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
-import com.iit.event.ticketing.system.util.FileUtils;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -31,15 +26,6 @@ public class CustomerService {
    */
   public @NonNull ApiResponse<Object> addCustomer(final @NonNull Customer customer) {
     log.debug("Add customer");
-
-    try {
-      TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
-      customer.setRetrievalInterval(ticketingConfiguration.getCustomerRetrievalRate());
-    } catch (IOException ex) {
-      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
-      return new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch ticketing configurations", List.of(ex.getMessage()));
-    }
-
     customers.add(customer);
     return new ApiResponse<>(HttpStatus.OK, "Customer added successfully");
   }
