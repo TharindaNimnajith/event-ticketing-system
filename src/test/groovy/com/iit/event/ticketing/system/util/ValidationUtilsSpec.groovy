@@ -67,6 +67,21 @@ class ValidationUtilsSpec extends Specification {
     }
 
     /**
+     * validatePrerequisitesToStartSimulation - Should return an empty list when both vendor and customer counts are positive
+     */
+    def "validatePrerequisitesToStartSimulation - Should return an empty list when both vendor and customer counts are positive"() {
+        given:
+        int vendorCount = 1
+        int customerCount = 1
+
+        when:
+        List<String> errors = ValidationUtils.validatePrerequisitesToStartSimulation(vendorCount, customerCount)
+
+        then:
+        errors.isEmpty()
+    }
+
+    /**
      * validatePrerequisitesToStartSimulation - Should return an error list when both vendor and customer counts are not positive (test case 1)
      */
     def "validatePrerequisitesToStartSimulation - Should return an error list when both vendor and customer counts are not positive (test case 1)"() {
@@ -113,20 +128,5 @@ class ValidationUtilsSpec extends Specification {
         then:
         errors.size() == 1
         errors[0] == "At least one vendor needs to be added"
-    }
-
-    /**
-     * validatePrerequisitesToStartSimulation - Should return an empty list when both vendor and customer counts are positive
-     */
-    def "validatePrerequisitesToStartSimulation - Should return an empty list when both vendor and customer counts are positive"() {
-        given:
-        int vendorCount = 1
-        int customerCount = 1
-
-        when:
-        List<String> errors = ValidationUtils.validatePrerequisitesToStartSimulation(vendorCount, customerCount)
-
-        then:
-        errors.isEmpty()
     }
 }
