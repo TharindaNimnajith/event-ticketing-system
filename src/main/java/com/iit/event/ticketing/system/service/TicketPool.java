@@ -33,7 +33,7 @@ public class TicketPool {
   /**
    * Add tickets
    *
-   * @param vendorId          Vendor ID
+   * @param vendorId          Vendor ID (Not null)
    * @param ticketsPerRelease Tickets per release
    */
   public synchronized void addTickets(final @NonNull String vendorId, final int ticketsPerRelease) {
@@ -48,7 +48,7 @@ public class TicketPool {
   /**
    * Remove ticket
    *
-   * @param customerId Customer ID
+   * @param customerId Customer ID (Not null)
    */
   public synchronized void removeTicket(final @NonNull String customerId) {
     if (!tickets.isEmpty()) {

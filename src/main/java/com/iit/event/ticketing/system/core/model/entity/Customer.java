@@ -42,7 +42,7 @@ public class Customer implements Runnable {
   /**
    * Customer constructor
    *
-   * @param name Name
+   * @param name Name (Not null)
    * @throws IOException IOException
    */
   @JsonCreator

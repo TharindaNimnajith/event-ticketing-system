@@ -36,7 +36,7 @@ public class Ticket {
   /**
    * Ticket constructor
    *
-   * @param vendorId Vendor ID
+   * @param vendorId Vendor ID (Not null)
    */
   public Ticket(final @NonNull String vendorId) {
     this.id = UUID.randomUUID().toString();

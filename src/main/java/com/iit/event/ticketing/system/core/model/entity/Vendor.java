@@ -49,8 +49,8 @@ public class Vendor implements Runnable {
   /**
    * Vendor constructor
    *
-   * @param name              Name
-   * @param ticketsPerRelease Tickets per release
+   * @param name              Name (Not null)
+   * @param ticketsPerRelease Tickets per release (Not null)
    * @throws IOException IOException
    */
   @JsonCreator
