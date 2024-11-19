@@ -27,9 +27,9 @@ public class TicketingController {
    * @return ResponseEntity containing ApiResponse (Not null)
    */
   @PostMapping("start")
-  public @NonNull ResponseEntity<ApiResponse<Object>> start() {
+  public @NonNull ResponseEntity<ApiResponse<Object>> startSimulation() {
     log.info("Start simulation");
-    ApiResponse<Object> apiResponse = ticketingService.start();
+    ApiResponse<Object> apiResponse = ticketingService.startSimulation();
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 
@@ -39,9 +39,9 @@ public class TicketingController {
    * @return ResponseEntity containing ApiResponse (Not null)
    */
   @PostMapping("stop")
-  public @NonNull ResponseEntity<ApiResponse<Object>> stop() {
+  public @NonNull ResponseEntity<ApiResponse<Object>> stopSimulation() {
     log.info("Stop simulation");
-    ApiResponse<Object> apiResponse = ticketingService.stop();
+    ApiResponse<Object> apiResponse = ticketingService.stopSimulation();
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 }

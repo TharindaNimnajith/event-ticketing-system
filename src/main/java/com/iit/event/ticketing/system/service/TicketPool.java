@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TicketPool {
 
-  private final List<Ticket> tickets = Collections.synchronizedList(new ArrayList<>());
+  private final List<Ticket> tickets;
   private final int maxCapacity;
 
   /**
@@ -26,21 +27,30 @@ public class TicketPool {
    */
   public TicketPool() throws IOException {
     TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
+
+    this.tickets = Collections.synchronizedList(new ArrayList<>());
     this.maxCapacity = ticketingConfiguration.getMaxTicketCapacity();
   }
 
   /**
    * Add tickets
    */
-  public synchronized void addTickets() {
-    // TODO
+  public synchronized void addTickets(final @NonNull String vendorId, final int ticketsPerRelease) {
+    if (maxCapacity - tickets.size() >= ticketsPerRelease) {
+      for (int i = 0; i < ticketsPerRelease; i++) {
+        Ticket ticket = new Ticket(vendorId);
+        tickets.add(ticket);
+      }
+    }
   }
 
   /**
    * Remove ticket
    */
-  public synchronized void removeTicket() {
-    // TODO
+  public synchronized void removeTicket(final @NonNull String customerId) {
+    if (!tickets.isEmpty()) {
+      tickets.removeFirst();
+    }
   }
 
   /**
@@ -48,7 +58,7 @@ public class TicketPool {
    *
    * @return Available ticket count
    */
-  public synchronized int getAvailableTicketCount() {
+  public int getAvailableTicketCount() {
     synchronized (tickets) {
       return (int) tickets.stream()
           .filter(ticket -> ticket.getStatus() == TicketStatus.AVAILABLE)

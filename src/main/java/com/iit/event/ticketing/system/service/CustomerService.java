@@ -4,6 +4,7 @@ import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.Customer;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,11 @@ import org.springframework.stereotype.Service;
  * Customer Service
  */
 @Service
+@RequiredArgsConstructor
 public class CustomerService {
 
   private final List<Customer> customers = new ArrayList<>();
+  private final TicketPool ticketPool;
 
   /**
    * Add customer
@@ -23,6 +26,7 @@ public class CustomerService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addCustomer(final @NonNull Customer customer) {
+    customer.setTicketPool(ticketPool);
     customers.add(customer);
     return new ApiResponse<>(HttpStatus.OK, "Customer added successfully");
   }
@@ -34,6 +38,15 @@ public class CustomerService {
    */
   public @NonNull ApiResponse<List<Customer>> getCustomers() {
     return new ApiResponse<>(HttpStatus.OK, "Customers fetched successfully", customers);
+  }
+
+  /**
+   * Get customers list
+   *
+   * @return List of customers (Not null)
+   */
+  public @NonNull List<Customer> getCustomersList() {
+    return customers;
   }
 
   /**

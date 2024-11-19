@@ -1,5 +1,7 @@
 package com.iit.event.ticketing.system.core.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iit.event.ticketing.system.service.TicketPool;
 import com.iit.event.ticketing.system.util.FileUtils;
@@ -9,6 +11,7 @@ import jakarta.validation.constraints.Positive;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 
@@ -17,8 +20,6 @@ import org.springframework.lang.NonNull;
  */
 @Getter
 public class Vendor implements Runnable {
-
-  private final TicketPool ticketPool;
 
   @JsonProperty("id")
   @NonNull
@@ -39,22 +40,28 @@ public class Vendor implements Runnable {
   @Positive
   private int releaseInterval;
 
+  @JsonIgnore
+  @Setter
+  private TicketPool ticketPool;
+
+  private volatile boolean running;
+
   /**
    * Vendor constructor
    *
    * @param name              Name
    * @param ticketsPerRelease Tickets per release
-   * @param ticketPool        TicketPool
    * @throws IOException IOException
    */
-  public Vendor(final @NonNull String name, final @NonNull Integer ticketsPerRelease, final @NonNull TicketPool ticketPool) throws IOException {
+  @JsonCreator
+  public Vendor(final @NonNull String name, final @NonNull Integer ticketsPerRelease) throws IOException {
     TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
 
     this.id = UUID.randomUUID().toString();
     this.name = StringUtils.trim(name);
     this.ticketsPerRelease = ticketsPerRelease;
     this.releaseInterval = ticketingConfiguration.getTicketReleaseRate();
-    this.ticketPool = ticketPool;
+    this.running = true;
   }
 
   /**
@@ -62,6 +69,18 @@ public class Vendor implements Runnable {
    */
   @Override
   public void run() {
-    // TODO
+    while (running) {
+      ticketPool.addTickets(id, ticketsPerRelease);
+
+      try {
+        Thread.sleep(releaseInterval);
+      } catch (InterruptedException ex) {
+        Thread.currentThread().interrupt();
+      }
+    }
+  }
+
+  public void stop() {
+    running = false;
   }
 }
