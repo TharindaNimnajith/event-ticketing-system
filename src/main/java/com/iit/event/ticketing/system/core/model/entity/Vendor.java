@@ -80,6 +80,9 @@ public class Vendor implements Runnable {
     }
   }
 
+  /**
+   * Stop
+   */
   public void stop() {
     running = false;
   }

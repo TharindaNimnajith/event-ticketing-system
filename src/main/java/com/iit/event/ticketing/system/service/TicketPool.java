@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TicketPool {
 
-  private final List<Ticket> tickets;
+  private final List<Ticket> tickets = Collections.synchronizedList(new ArrayList<>());
   private final int maxCapacity;
 
   /**
@@ -27,13 +27,14 @@ public class TicketPool {
    */
   public TicketPool() throws IOException {
     TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
-
-    this.tickets = Collections.synchronizedList(new ArrayList<>());
     this.maxCapacity = ticketingConfiguration.getMaxTicketCapacity();
   }
 
   /**
    * Add tickets
+   *
+   * @param vendorId          Vendor ID
+   * @param ticketsPerRelease Tickets per release
    */
   public synchronized void addTickets(final @NonNull String vendorId, final int ticketsPerRelease) {
     if (maxCapacity - tickets.size() >= ticketsPerRelease) {
@@ -46,6 +47,8 @@ public class TicketPool {
 
   /**
    * Remove ticket
+   *
+   * @param customerId Customer ID
    */
   public synchronized void removeTicket(final @NonNull String customerId) {
     if (!tickets.isEmpty()) {

@@ -71,6 +71,9 @@ public class Customer implements Runnable {
     }
   }
 
+  /**
+   * Stop
+   */
   public void stop() {
     running = false;
   }

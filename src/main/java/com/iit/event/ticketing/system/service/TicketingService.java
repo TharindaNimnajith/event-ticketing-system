@@ -45,17 +45,17 @@ public class TicketingService {
     started = true;
 
     for (Vendor vendor : vendorService.getVendorsList()) {
-//      Thread thread = new Thread(vendor);
-//      thread.start();
-//
-//      vendorThreads.add(thread);
+      // Thread thread = new Thread(vendor);
+      // thread.start();
+      //
+      // vendorThreads.add(thread);
     }
 
     for (Customer customer : customerService.getCustomersList()) {
-//      Thread thread = new Thread(customer);
-//      thread.start();
-//
-//      customerThreads.add(thread);
+      // Thread thread = new Thread(customer);
+      // thread.start();
+      //
+      // customerThreads.add(thread);
     }
 
     return new ApiResponse<>(HttpStatus.OK, "Started simulation");
@@ -72,12 +72,16 @@ public class TicketingService {
     }
 
     for (Thread thread : vendorThreads) {
-      // TODO
+      // thread.stop();
     }
 
+    // vendorThreads.clear();
+
     for (Thread thread : customerThreads) {
-      // TODO
+      // thread.stop();
     }
+
+    // customerThreads.clear();
 
     started = false;
 
