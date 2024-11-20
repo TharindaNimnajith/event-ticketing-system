@@ -1,70 +1,11 @@
 package com.iit.event.ticketing.system.util
 
-import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration
 import spock.lang.Specification
 
 /**
  * Spock Tests for Validation Utils
  */
 class ValidationUtilsSpec extends Specification {
-
-    /**
-     * validateTicketingConfigurations - Should return an empty list when maxTicketCapacity > totalTickets
-     */
-    def "validateTicketingConfigurations - Should return an empty list when maxTicketCapacity > totalTickets"() {
-        given:
-        TicketingConfiguration ticketingConfiguration = TicketingConfiguration.builder()
-                .maxTicketCapacity(100)
-                .totalTickets(99)
-                .ticketReleaseRate(1000)
-                .customerRetrievalRate(2000)
-                .build()
-
-        when:
-        List<String> errors = ValidationUtils.validateTicketingConfigurations(ticketingConfiguration)
-
-        then:
-        errors.isEmpty()
-    }
-
-    /**
-     * validateTicketingConfigurations - Should return an empty list when maxTicketCapacity == totalTickets
-     */
-    def "validateTicketingConfigurations - Should return an empty list when maxTicketCapacity == totalTickets"() {
-        given:
-        TicketingConfiguration ticketingConfiguration = TicketingConfiguration.builder()
-                .maxTicketCapacity(100)
-                .totalTickets(100)
-                .ticketReleaseRate(1000)
-                .customerRetrievalRate(2000)
-                .build()
-
-        when:
-        List<String> errors = ValidationUtils.validateTicketingConfigurations(ticketingConfiguration)
-
-        then:
-        errors.isEmpty()
-    }
-
-    /**
-     * validateTicketingConfigurations - Should return an empty list when maxTicketCapacity < totalTickets
-     */
-    def "validateTicketingConfigurations - Should return an error list when maxTicketCapacity < totalTickets"() {
-        given:
-        TicketingConfiguration ticketingConfiguration = TicketingConfiguration.builder()
-                .maxTicketCapacity(100)
-                .totalTickets(101)
-                .ticketReleaseRate(1000)
-                .customerRetrievalRate(2000)
-                .build()
-
-        when:
-        List<String> errors = ValidationUtils.validateTicketingConfigurations(ticketingConfiguration)
-
-        then:
-        errors.size() == 1
-        errors[0] == "Total Tickets (101) should not be greater than Max Ticket Capacity (100)"
-    }
 
     /**
      * validatePrerequisitesToStartSimulation - Should return an empty list when both vendor and customer counts are positive

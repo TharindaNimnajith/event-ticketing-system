@@ -40,11 +40,11 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
     int totalTickets = validateInput(scanner, promptTotalTickets, maxTicketCapacity);
     ticketingConfiguration.setTotalTickets(totalTickets);
 
-    String promptTicketReleaseRate = "Ticket Release Rate (In Milliseconds):";
+    String promptTicketReleaseRate = "Ticket Release Rate (In Seconds):";
     int ticketReleaseRate = validateInput(scanner, promptTicketReleaseRate);
     ticketingConfiguration.setTicketReleaseRate(ticketReleaseRate);
 
-    String promptCustomerRetrievalRate = "Customer Retrieval Rate (In Milliseconds):";
+    String promptCustomerRetrievalRate = "Customer Retrieval Rate (In Seconds):";
     int customerRetrievalRate = validateInput(scanner, promptCustomerRetrievalRate);
     ticketingConfiguration.setCustomerRetrievalRate(customerRetrievalRate);
 
@@ -60,7 +60,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
   }
 
   /**
-   * <p> Validate to ensure that Total Tickets user input is a positive integer not greater than Max Ticket Capacity </p>
+   * <p> Validate to ensure that Total Tickets user input is a non-negative integer not greater than Max Ticket Capacity </p>
    * <p> Otherwise prompt again with a relevant error message </p>
    *
    * @param scanner           Scanner (Not null)
@@ -69,7 +69,27 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
    * @return Valid Total Tickets input
    */
   private int validateInput(final @NonNull Scanner scanner, final @NonNull String prompt, final int maxTicketCapacity) {
-    int totalTickets = validateInput(scanner, prompt);
+    int totalTickets;
+
+    while (true) {
+      log.info("\n{}", prompt);
+
+      // Check if user input is an integer
+      if (scanner.hasNextInt()) {
+        int input = scanner.nextInt();
+
+        // Check if user input is a non-negative integer
+        if (input >= 0) {
+          totalTickets = input;
+          break;
+        } else {
+          log.warn("\nIncorrect Input ({}) - Value should be non-negative", input);
+        }
+      } else {
+        // Consuming invalid input
+        log.warn("\nIncorrect Input ({}) - Value should be an integer", scanner.next());
+      }
+    }
 
     // Check if Total Tickets user input is not greater than Max Ticket Capacity
     while (totalTickets > maxTicketCapacity) {
@@ -119,8 +139,8 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
       log.info("\nTicketing Configurations:\n{}: {}\n{}: {}\n{}: {}\n{}: {}",
           "Max Ticket Capacity", ticketingConfiguration.getMaxTicketCapacity(),
           "Total Tickets", ticketingConfiguration.getTotalTickets(),
-          "Ticket Release Rate (In Milliseconds)", ticketingConfiguration.getTicketReleaseRate(),
-          "Customer Retrieval Rate (In Milliseconds)", ticketingConfiguration.getCustomerRetrievalRate()
+          "Ticket Release Rate (In Seconds)", ticketingConfiguration.getTicketReleaseRate(),
+          "Customer Retrieval Rate (In Seconds)", ticketingConfiguration.getCustomerRetrievalRate()
       );
     } catch (IOException ex) {
       log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);

@@ -1,6 +1,5 @@
 package com.iit.event.ticketing.system.util;
 
-import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -12,25 +11,6 @@ import org.springframework.lang.NonNull;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValidationUtils {
-
-  /**
-   * Validate ticketing configurations
-   *
-   * @param ticketingConfiguration TicketingConfiguration (Not null)
-   * @return List of error messages if one or more validation failures found, otherwise empty list (Not null)
-   */
-  public static @NonNull List<String> validateTicketingConfigurations(final @NonNull TicketingConfiguration ticketingConfiguration) {
-    List<String> errors = new ArrayList<>();
-
-    int totalTickets = ticketingConfiguration.getTotalTickets();
-    int maxTicketCapacity = ticketingConfiguration.getMaxTicketCapacity();
-
-    if (totalTickets > maxTicketCapacity) {
-      errors.add(String.format("Total Tickets (%d) should not be greater than Max Ticket Capacity (%d)", totalTickets, maxTicketCapacity));
-    }
-
-    return errors;
-  }
 
   /**
    * Validate prerequisites to start simulation

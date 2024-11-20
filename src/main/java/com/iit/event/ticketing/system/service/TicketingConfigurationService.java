@@ -5,7 +5,6 @@ import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONF
 import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
 import com.iit.event.ticketing.system.util.FileUtils;
-import com.iit.event.ticketing.system.util.ValidationUtils;
 import java.io.IOException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -19,28 +18,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class TicketingConfigurationService {
-
-  /**
-   * Add ticketing configurations
-   *
-   * @param ticketingConfiguration TicketingConfiguration (Not null)
-   * @return ApiResponse (Not null)
-   */
-  public @NonNull ApiResponse<Object> addConfigurations(final @NonNull TicketingConfiguration ticketingConfiguration) {
-    List<String> errors = ValidationUtils.validateTicketingConfigurations(ticketingConfiguration);
-
-    if (!errors.isEmpty()) {
-      return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Ticketing configuration validations failed", errors);
-    }
-
-    try {
-      FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
-      return new ApiResponse<>(HttpStatus.OK, "Ticketing configurations added successfully");
-    } catch (IOException ex) {
-      log.error("Error while saving ticketing configurations to file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
-      return new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save ticketing configurations", List.of(ex.getMessage()));
-    }
-  }
 
   /**
    * Get ticketing configurations
