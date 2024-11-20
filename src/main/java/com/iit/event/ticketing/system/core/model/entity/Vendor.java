@@ -10,7 +10,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.io.IOException;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
@@ -18,6 +20,7 @@ import org.springframework.lang.NonNull;
 /**
  * Vendor
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class Vendor implements Runnable {
 
@@ -37,7 +40,6 @@ public class Vendor implements Runnable {
   private Integer ticketsPerRelease;
 
   @JsonProperty("release_interval")
-  @Positive
   private int releaseInterval;
 
   @JsonIgnore

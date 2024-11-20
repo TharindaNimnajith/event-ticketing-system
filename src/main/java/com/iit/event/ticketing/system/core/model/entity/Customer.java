@@ -6,10 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iit.event.ticketing.system.service.TicketPool;
 import com.iit.event.ticketing.system.util.FileUtils;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
 import java.io.IOException;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
@@ -17,6 +18,7 @@ import org.springframework.lang.NonNull;
 /**
  * Customer
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class Customer implements Runnable {
 
@@ -30,7 +32,6 @@ public class Customer implements Runnable {
   private String name;
 
   @JsonProperty("retrieval_interval")
-  @Positive
   private int retrievalInterval;
 
   @JsonIgnore

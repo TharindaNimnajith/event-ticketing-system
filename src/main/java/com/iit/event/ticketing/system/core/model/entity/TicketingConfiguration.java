@@ -2,17 +2,22 @@ package com.iit.event.ticketing.system.core.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * Ticketing Configuration
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @Getter
-@Setter
 public class TicketingConfiguration implements Serializable {
 
   @JsonProperty("total_tickets")
+  @Setter
   private int totalTickets;
 
   @JsonProperty("ticket_release_rate")

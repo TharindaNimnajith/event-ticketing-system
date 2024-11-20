@@ -3,10 +3,12 @@ package com.iit.event.ticketing.system.service;
 import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
 
 import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
+import com.iit.event.ticketing.system.core.model.entity.Vendor;
 import com.iit.event.ticketing.system.util.FileUtils;
 import java.io.IOException;
 import java.util.Scanner;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -16,8 +18,15 @@ import org.springframework.stereotype.Component;
  * Initialize TicketingConfiguration by prompting user to input values at application startup
  */
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class TicketingConfigurationInitializer implements ApplicationRunner {
+
+  private static final String DEFAULT_VENDOR_NAME = "default_vendor";
+  private static final int DEFAULT_VENDOR_TICKETS_PER_RELEASE = 1;
+
+  private final VendorService vendorService;
+  private final TicketPool ticketPool;
 
   /**
    * Executes on application startup to prompt user for ticketing configuration values
@@ -27,28 +36,25 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
   @Override
   public void run(final ApplicationArguments applicationArguments) {
     Scanner scanner = new Scanner(System.in);
-    TicketingConfiguration ticketingConfiguration = new TicketingConfiguration();
 
     // Get user inputs for ticketing configurations
     log.info("\nEnter Ticketing Configurations:");
 
     String promptMaxTicketCapacity = "Max Ticket Capacity:";
     int maxTicketCapacity = validateInput(scanner, promptMaxTicketCapacity);
-    ticketingConfiguration.setMaxTicketCapacity(maxTicketCapacity);
 
     String promptTotalTickets = "Total Tickets:";
     int totalTickets = validateInput(scanner, promptTotalTickets, maxTicketCapacity);
-    ticketingConfiguration.setTotalTickets(totalTickets);
 
     String promptTicketReleaseRate = "Ticket Release Rate (In Seconds):";
     int ticketReleaseRate = validateInput(scanner, promptTicketReleaseRate);
-    ticketingConfiguration.setTicketReleaseRate(ticketReleaseRate);
 
     String promptCustomerRetrievalRate = "Customer Retrieval Rate (In Seconds):";
     int customerRetrievalRate = validateInput(scanner, promptCustomerRetrievalRate);
-    ticketingConfiguration.setCustomerRetrievalRate(customerRetrievalRate);
 
     // Save ticketing configurations to file
+    TicketingConfiguration ticketingConfiguration = new TicketingConfiguration(totalTickets, ticketReleaseRate, customerRetrievalRate, maxTicketCapacity);
+
     try {
       FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
     } catch (IOException ex) {
@@ -57,6 +63,9 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
 
     // Print loaded ticketing configurations from file to console
     printTicketingConfigurations();
+
+    // Add total tickets to ticket pool
+    addTotalTicketsToTicketPool(totalTickets);
   }
 
   /**
@@ -142,6 +151,24 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
           "Ticket Release Rate (In Seconds)", ticketingConfiguration.getTicketReleaseRate(),
           "Customer Retrieval Rate (In Seconds)", ticketingConfiguration.getCustomerRetrievalRate()
       );
+    } catch (IOException ex) {
+      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
+    }
+  }
+
+  /**
+   * Add total tickets to ticket pool
+   *
+   * @param totalTickets Total tickets
+   */
+  private void addTotalTicketsToTicketPool(final int totalTickets) {
+    try {
+      Vendor vendor = new Vendor(DEFAULT_VENDOR_NAME, DEFAULT_VENDOR_TICKETS_PER_RELEASE);
+      vendorService.addVendor(vendor);
+
+      for (int i = 0; i < totalTickets; i++) {
+        ticketPool.addTickets(vendor.getId(), vendor.getTicketsPerRelease());
+      }
     } catch (IOException ex) {
       log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
     }
