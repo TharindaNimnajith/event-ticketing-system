@@ -40,14 +40,14 @@ public class CustomerController {
   }
 
   /**
-   * Get customer
+   * Get customers list
    *
    * @return ResponseEntity containing ApiResponse with List of Customer objects (Not null)
    */
   @GetMapping
-  public @NonNull ResponseEntity<ApiResponse<List<Customer>>> getCustomer() {
+  public @NonNull ResponseEntity<ApiResponse<List<Customer>>> getCustomersList() {
     log.info("Get customers");
-    ApiResponse<List<Customer>> apiResponse = customerService.getCustomers();
+    ApiResponse<List<Customer>> apiResponse = customerService.getCustomersList();
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 }

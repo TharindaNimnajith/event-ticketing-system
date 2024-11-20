@@ -40,14 +40,14 @@ public class VendorController {
   }
 
   /**
-   * Get vendor
+   * Get vendors list
    *
    * @return ResponseEntity containing ApiResponse with List of Vendor objects (Not null)
    */
   @GetMapping
-  public @NonNull ResponseEntity<ApiResponse<List<Vendor>>> getVendor() {
+  public @NonNull ResponseEntity<ApiResponse<List<Vendor>>> getVendorsList() {
     log.info("Get vendors");
-    ApiResponse<List<Vendor>> apiResponse = vendorService.getVendors();
+    ApiResponse<List<Vendor>> apiResponse = vendorService.getVendorsList();
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
 }

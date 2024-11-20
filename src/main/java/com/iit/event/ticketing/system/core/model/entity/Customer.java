@@ -37,6 +37,7 @@ public class Customer implements Runnable {
   @Setter
   private TicketPool ticketPool;
 
+  @JsonIgnore
   private volatile boolean running;
 
   /**

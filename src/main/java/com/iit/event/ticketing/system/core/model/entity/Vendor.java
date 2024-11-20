@@ -44,6 +44,7 @@ public class Vendor implements Runnable {
   @Setter
   private TicketPool ticketPool;
 
+  @JsonIgnore
   private volatile boolean running;
 
   /**

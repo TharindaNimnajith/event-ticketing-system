@@ -6,6 +6,7 @@ import com.iit.event.ticketing.system.core.model.entity.Vendor;
 import com.iit.event.ticketing.system.util.ValidationUtils;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -24,6 +25,7 @@ public class TicketingService {
   private final List<Thread> vendorThreads = new ArrayList<>();
   private final List<Thread> customerThreads = new ArrayList<>();
 
+  @Getter
   private boolean started = false;
 
   /**
@@ -44,14 +46,14 @@ public class TicketingService {
 
     started = true;
 
-    for (Vendor vendor : vendorService.getVendorsList()) {
+    for (Vendor vendor : vendorService.getVendors()) {
       // Thread thread = new Thread(vendor);
       // thread.start();
       //
       // vendorThreads.add(thread);
     }
 
-    for (Customer customer : customerService.getCustomersList()) {
+    for (Customer customer : customerService.getCustomers()) {
       // Thread thread = new Thread(customer);
       // thread.start();
       //
