@@ -4,7 +4,7 @@ import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONF
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
+import com.iit.event.ticketing.system.core.model.TicketingConfiguration;
 import java.io.File;
 import java.io.IOException;
 import lombok.AccessLevel;

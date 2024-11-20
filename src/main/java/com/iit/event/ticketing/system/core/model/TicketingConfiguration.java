@@ -1,4 +1,4 @@
-package com.iit.event.ticketing.system.core.model.entity;
+package com.iit.event.ticketing.system.core.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;

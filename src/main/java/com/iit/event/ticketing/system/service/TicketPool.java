@@ -1,8 +1,8 @@
 package com.iit.event.ticketing.system.service;
 
 import com.iit.event.ticketing.system.core.model.TicketStatus;
+import com.iit.event.ticketing.system.core.model.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.entity.Ticket;
-import com.iit.event.ticketing.system.core.model.entity.TicketingConfiguration;
 import com.iit.event.ticketing.system.util.FileUtils;
 import java.io.IOException;
 import java.util.ArrayList;
