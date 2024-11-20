@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
 
   private final TicketPool ticketPool;
-  private final TicketingService ticketingService;
 
   @Getter
   private final List<Customer> customers = new ArrayList<>();
@@ -30,10 +29,6 @@ public class CustomerService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addCustomer(final @NonNull Customer customer) {
-    if (ticketingService.isStarted()) {
-      return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to add customer", List.of("Simulation is currently running"));
-    }
-
     customer.setTicketPool(ticketPool);
     customers.add(customer);
     return new ApiResponse<>(HttpStatus.OK, "Customer added successfully");

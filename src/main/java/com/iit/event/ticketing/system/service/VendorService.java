@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 public class VendorService {
 
   private final TicketPool ticketPool;
-  private final TicketingService ticketingService;
 
   @Getter
   private final List<Vendor> vendors = new ArrayList<>();
@@ -30,10 +29,6 @@ public class VendorService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addVendor(final @NonNull Vendor vendor) {
-    if (ticketingService.isStarted()) {
-      return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to add vendor", List.of("Simulation is currently running"));
-    }
-
     vendor.setTicketPool(ticketPool);
     vendors.add(vendor);
     return new ApiResponse<>(HttpStatus.OK, "Vendor added successfully");
