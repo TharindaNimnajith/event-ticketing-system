@@ -3,6 +3,7 @@ package com.iit.event.ticketing.system.service;
 import com.iit.event.ticketing.system.core.model.TicketStatus;
 import com.iit.event.ticketing.system.core.model.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.entity.Ticket;
+import com.iit.event.ticketing.system.repository.TicketRepository;
 import com.iit.event.ticketing.system.util.FileUtils;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,14 +21,19 @@ public class TicketPool {
   private final List<Ticket> tickets = Collections.synchronizedList(new ArrayList<>());
   private final int maxCapacity;
 
+  private final TicketRepository ticketRepository;
+
   /**
    * TicketPool constructor
    *
+   * @param ticketRepository TicketRepository (Not null)
    * @throws IOException IOException
    */
-  public TicketPool() throws IOException {
+  public TicketPool(final @NonNull TicketRepository ticketRepository) throws IOException {
     TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
     this.maxCapacity = ticketingConfiguration.getMaxTicketCapacity();
+
+    this.ticketRepository = ticketRepository;
   }
 
   /**
@@ -41,6 +47,7 @@ public class TicketPool {
       for (int i = 0; i < ticketsPerRelease; i++) {
         Ticket ticket = new Ticket(vendorId);
         tickets.add(ticket);
+        ticketRepository.save(ticket);
       }
     }
   }

@@ -2,6 +2,7 @@ package com.iit.event.ticketing.system.service;
 
 import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.Customer;
+import com.iit.event.ticketing.system.repository.CustomerRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
 
   private final TicketPool ticketPool;
+  private final CustomerRepository customerRepository;
 
   @Getter
   private final List<Customer> customers = new ArrayList<>();
@@ -31,6 +33,7 @@ public class CustomerService {
   public @NonNull ApiResponse<Object> addCustomer(final @NonNull Customer customer) {
     customer.setTicketPool(ticketPool);
     customers.add(customer);
+    customerRepository.save(customer);
     return new ApiResponse<>(HttpStatus.OK, "Customer added successfully");
   }
 
