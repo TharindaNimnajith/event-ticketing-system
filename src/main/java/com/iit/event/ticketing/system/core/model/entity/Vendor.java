@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iit.event.ticketing.system.core.model.TicketingConfiguration;
+import com.iit.event.ticketing.system.core.model.VendorStatus;
 import com.iit.event.ticketing.system.service.TicketPool;
 import com.iit.event.ticketing.system.util.FileUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -54,6 +57,13 @@ public class Vendor implements Runnable {
   @JsonProperty("release_interval")
   private int releaseInterval;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status", nullable = false)
+  @JsonProperty("status")
+  @NonNull
+  @Setter
+  private VendorStatus status;
+
   @Transient
   @JsonIgnore
   @Setter
@@ -78,6 +88,7 @@ public class Vendor implements Runnable {
     this.name = StringUtils.trim(name);
     this.ticketsPerRelease = ticketsPerRelease;
     this.releaseInterval = ticketingConfiguration.getTicketReleaseRate();
+    this.status = VendorStatus.ACTIVE;
     this.running = true;
   }
 

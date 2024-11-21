@@ -15,15 +15,15 @@ public class ValidationUtils {
   /**
    * Validate prerequisites to start simulation
    *
-   * @param vendorCount   Vendor count
-   * @param customerCount Customer count
+   * @param activeVendorCount Active vendor count
+   * @param customerCount     Customer count
    * @return List of error messages if one or more failures found, otherwise empty list (Not null)
    */
-  public static @NonNull List<String> validatePrerequisitesToStartSimulation(final int vendorCount, final int customerCount) {
+  public static @NonNull List<String> validatePrerequisitesToStartSimulation(final int activeVendorCount, final int customerCount) {
     List<String> errors = new ArrayList<>();
 
-    if (vendorCount <= 0) {
-      errors.add("At least one vendor needs to be added");
+    if (activeVendorCount <= 0) {
+      errors.add("At least one active vendor needs to be added");
     }
 
     if (customerCount <= 0) {

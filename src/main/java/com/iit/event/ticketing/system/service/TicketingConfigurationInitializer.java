@@ -174,6 +174,10 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
         }
 
         log.info("Default vendor ({} - {}) and {} tickets added to ticket pool", vendor.getId(), vendor.getName(), ticketPool.getAvailableTicketCount());
+
+        vendorService.removeVendor(vendor);
+
+        log.info("Default vendor ({} - {}) has been deactivated", vendor.getId(), vendor.getName());
       } catch (IOException ex) {
         log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
       }

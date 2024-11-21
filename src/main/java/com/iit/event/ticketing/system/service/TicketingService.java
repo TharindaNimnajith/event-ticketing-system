@@ -36,7 +36,7 @@ public class TicketingService {
       return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to start", List.of("Simulation is already running"));
     }
 
-    List<String> errors = ValidationUtils.validatePrerequisitesToStartSimulation(vendorService.getVendorCount(), customerService.getCustomerCount());
+    List<String> errors = ValidationUtils.validatePrerequisitesToStartSimulation(vendorService.getActiveVendorCount(), customerService.getCustomerCount());
 
     if (!errors.isEmpty()) {
       return new ApiResponse<>(HttpStatus.UNPROCESSABLE_ENTITY, "Failed to start due to missing prerequisites", errors);
@@ -44,7 +44,7 @@ public class TicketingService {
 
     started = true;
 
-    for (Vendor vendor : vendorService.getVendors()) {
+    for (Vendor vendor : vendorService.getActiveVendors()) {
       // Thread thread = new Thread(vendor);
       // thread.start();
       //
