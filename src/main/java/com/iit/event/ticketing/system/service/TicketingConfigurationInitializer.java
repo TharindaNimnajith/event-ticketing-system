@@ -162,15 +162,21 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
    * @param totalTickets Total tickets
    */
   private void addTotalTicketsToTicketPool(final int totalTickets) {
-    try {
-      Vendor vendor = new Vendor(DEFAULT_VENDOR_NAME, DEFAULT_VENDOR_TICKETS_PER_RELEASE);
-      vendorService.addVendor(vendor);
+    if (totalTickets > 0) {
+      log.info("Adding default vendor ({}) and total tickets ({}) to ticket pool", DEFAULT_VENDOR_NAME, totalTickets);
 
-      for (int i = 0; i < totalTickets; i++) {
-        ticketPool.addTickets(vendor.getId(), vendor.getTicketsPerRelease());
+      try {
+        Vendor vendor = new Vendor(DEFAULT_VENDOR_NAME, DEFAULT_VENDOR_TICKETS_PER_RELEASE);
+        vendorService.addVendor(vendor);
+
+        for (int i = 0; i < totalTickets; i++) {
+          ticketPool.addTickets(vendor.getId(), vendor.getTicketsPerRelease());
+        }
+
+        log.info("Default vendor ({} - {}) and {} tickets added to ticket pool", vendor.getId(), vendor.getName(), ticketPool.getAvailableTicketCount());
+      } catch (IOException ex) {
+        log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
       }
-    } catch (IOException ex) {
-      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
     }
   }
 }
