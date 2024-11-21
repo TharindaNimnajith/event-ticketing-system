@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerService {
 
   private final TicketPool ticketPool;
@@ -31,6 +33,11 @@ public class CustomerService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addCustomer(final @NonNull Customer customer) {
+    if (TicketingService.isStarted()) {
+      log.debug("Failed to add customer since the simulation is currently running");
+      return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to add customer", List.of("Simulation is currently running"));
+    }
+
     customer.setTicketPool(ticketPool);
     customers.add(customer);
     customerRepository.save(customer);

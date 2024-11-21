@@ -6,6 +6,7 @@ import com.iit.event.ticketing.system.core.model.entity.Vendor;
 import com.iit.event.ticketing.system.util.ValidationUtils;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -18,13 +19,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TicketingService {
 
+  @Getter
+  private static boolean started = false;
+
   private final VendorService vendorService;
   private final CustomerService customerService;
 
   private final List<Thread> vendorThreads = new ArrayList<>();
   private final List<Thread> customerThreads = new ArrayList<>();
-
-  private boolean started = false;
 
   /**
    * Start simulation

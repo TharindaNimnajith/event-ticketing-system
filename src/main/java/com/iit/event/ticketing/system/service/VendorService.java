@@ -34,6 +34,11 @@ public class VendorService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addVendor(final @NonNull Vendor vendor) {
+    if (TicketingService.isStarted()) {
+      log.debug("Failed to add vendor since the simulation is currently running");
+      return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to add vendor", List.of("Simulation is currently running"));
+    }
+
     vendor.setTicketPool(ticketPool);
     activeVendors.add(vendor);
     vendorRepository.save(vendor);
