@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +17,10 @@ import org.springframework.stereotype.Component;
  * Ticket Pool
  */
 @Component
+@Slf4j
 public class TicketPool {
 
-  private final List<Ticket> tickets = Collections.synchronizedList(new ArrayList<>());
+  private final List<Ticket> availableTickets = Collections.synchronizedList(new ArrayList<>());
   private final int maxCapacity;
 
   private final TicketRepository ticketRepository;
@@ -43,13 +45,27 @@ public class TicketPool {
    * @param ticketsPerRelease Tickets per release
    */
   public synchronized void addTickets(final @NonNull String vendorId, final int ticketsPerRelease) {
-    if (maxCapacity - tickets.size() >= ticketsPerRelease) {
-      for (int i = 0; i < ticketsPerRelease; i++) {
-        Ticket ticket = new Ticket(vendorId);
-        tickets.add(ticket);
-        ticketRepository.save(ticket);
-      }
+    if (maxCapacity - availableTickets.size() < ticketsPerRelease) {
+      log.error("Not enough capacity to add tickets - Max capacity: {}; Total tickets: {}; Tickets per release: {};",
+          maxCapacity,
+          availableTickets.size(),
+          ticketsPerRelease
+      );
+
+      return;
     }
+
+    for (int i = 0; i < ticketsPerRelease; i++) {
+      Ticket ticket = new Ticket(vendorId);
+      availableTickets.add(ticket);
+      ticketRepository.save(ticket);
+    }
+
+    log.debug("Add tickets - Vendor Id: {}; Tickets per release: {}; Total tickets: {};",
+        vendorId,
+        ticketsPerRelease,
+        availableTickets.size()
+    );
   }
 
   /**
@@ -58,9 +74,17 @@ public class TicketPool {
    * @param customerId Customer ID (Not null)
    */
   public synchronized void removeTicket(final @NonNull String customerId) {
-    if (!tickets.isEmpty()) {
-      tickets.removeFirst();
+    if (availableTickets.isEmpty()) {
+      log.error("Remove ticket failed - Ticket pool is empty - Customer Id: {}", customerId);
+      return;
     }
+
+    Ticket ticket = availableTickets.removeFirst();
+    ticket.setCustomerId(customerId);
+    ticket.setStatus(TicketStatus.SOLD);
+    ticketRepository.save(ticket);
+
+    log.debug("Remove ticket - Customer Id: {}; Total tickets: {};", customerId, availableTickets.size());
   }
 
   /**
@@ -69,10 +93,8 @@ public class TicketPool {
    * @return Available ticket count
    */
   public int getAvailableTicketCount() {
-    synchronized (tickets) {
-      return (int) tickets.stream()
-          .filter(ticket -> ticket.getStatus() == TicketStatus.AVAILABLE)
-          .count();
+    synchronized (availableTickets) {
+      return availableTickets.size();
     }
   }
 }

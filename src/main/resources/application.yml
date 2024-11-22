@@ -1,6 +1,8 @@
 spring:
   application:
     name: event-ticketing-system
+    group: com.iit.event.ticketing.system
+    version: 1.0.0
   lifecycle:
     timeout-per-shutdown-phase: 1m
   threads:
@@ -31,10 +33,11 @@ management:
   endpoints:
     web:
       base-path: /management
-    enabled-by-default: false
+    access:
+      default: read_only
   endpoint:
     health:
-      enabled: true
+      access: read_only
 
 logging:
   level:

@@ -18,10 +18,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 
@@ -32,6 +34,7 @@ import org.springframework.lang.NonNull;
 @Table(name = "vendors")
 @NoArgsConstructor
 @Getter
+@Slf4j
 public class Vendor implements Runnable {
 
   @Id
@@ -101,15 +104,16 @@ public class Vendor implements Runnable {
       ticketPool.addTickets(id, ticketsPerRelease);
 
       try {
-        Thread.sleep(releaseInterval);
+        Thread.sleep(Duration.ofSeconds(releaseInterval));
       } catch (InterruptedException ex) {
+        log.error(ex.getMessage(), ex);
         Thread.currentThread().interrupt();
       }
     }
   }
 
   /**
-   * Stop
+   * Stop vendor thread from running
    */
   public void stop() {
     running = false;

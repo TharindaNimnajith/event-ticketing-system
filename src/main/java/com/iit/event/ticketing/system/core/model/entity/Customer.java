@@ -13,10 +13,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 
@@ -27,6 +29,7 @@ import org.springframework.lang.NonNull;
 @Table(name = "customers")
 @NoArgsConstructor
 @Getter
+@Slf4j
 public class Customer implements Runnable {
 
   @Id
@@ -79,15 +82,16 @@ public class Customer implements Runnable {
       ticketPool.removeTicket(id);
 
       try {
-        Thread.sleep(retrievalInterval);
+        Thread.sleep(Duration.ofSeconds(retrievalInterval));
       } catch (InterruptedException ex) {
+        log.error(ex.getMessage(), ex);
         Thread.currentThread().interrupt();
       }
     }
   }
 
   /**
-   * Stop
+   * Stop customer thread from running
    */
   public void stop() {
     running = false;
