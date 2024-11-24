@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class CustomerController {
 
+  @NonNull
   private final CustomerService customerService;
 
   /**
@@ -34,7 +35,7 @@ public class CustomerController {
    */
   @PostMapping
   public @NonNull ResponseEntity<ApiResponse<Object>> addCustomer(final @RequestBody @Valid @NonNull Customer customer) {
-    log.info("Add customer");
+    log.info("Add customer - Id: {}; Name: {};", customer.getId(), customer.getName());
     ApiResponse<Object> apiResponse = customerService.addCustomer(customer);
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
@@ -46,7 +47,7 @@ public class CustomerController {
    */
   @GetMapping
   public @NonNull ResponseEntity<ApiResponse<List<Customer>>> getCustomersList() {
-    log.info("Get customers");
+    log.info("Get customers list");
     ApiResponse<List<Customer>> apiResponse = customerService.getCustomersList();
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }

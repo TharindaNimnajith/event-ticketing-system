@@ -19,9 +19,11 @@ import org.springframework.lang.NonNull;
 public class ApiResponse<T> {
 
   @JsonProperty("http_status")
+  @NonNull
   private HttpStatus httpStatus;
 
   @JsonProperty("message")
+  @NonNull
   private String message;
 
   @JsonProperty("data")

@@ -1,14 +1,9 @@
 package com.iit.event.ticketing.system.service;
 
-import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
-
 import com.iit.event.ticketing.system.core.model.ApiResponse;
-import com.iit.event.ticketing.system.core.model.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.entity.Customer;
 import com.iit.event.ticketing.system.core.model.entity.Vendor;
-import com.iit.event.ticketing.system.util.FileUtils;
 import com.iit.event.ticketing.system.util.ValidationUtils;
-import java.io.IOException;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +25,11 @@ public class TicketingService {
   @Setter
   private static boolean started = false;
 
+  @NonNull
   private final VendorService vendorService;
+
+  @NonNull
   private final CustomerService customerService;
-  private final TicketPool ticketPool;
 
   /**
    * Start simulation
@@ -40,25 +37,32 @@ public class TicketingService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> startSimulation() {
+    log.debug("Starting simulation");
+
+    // Check if simulation is not running before starting it
     if (started) {
-      log.debug("Failed to start since the simulation is already running");
+      log.error("Failed to start since the simulation is already running");
       return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to start", List.of("Simulation is already running"));
     }
 
+    // Validate prerequisites (system has customers and active vendors) to start simulation
     List<String> errors = ValidationUtils.validatePrerequisitesToStartSimulation(vendorService.getActiveVendorCount(), customerService.getCustomerCount());
 
     if (!errors.isEmpty()) {
-      log.debug("Failed to start due to missing prerequisites - {}", String.join(", ", errors));
+      log.error("Failed to start due to missing prerequisites - {}", String.join(", ", errors));
       return new ApiResponse<>(HttpStatus.UNPROCESSABLE_ENTITY, "Failed to start due to missing prerequisites", errors);
     }
 
+    // Set started flag to true as simulation is running
     setStarted(true);
 
+    // Start vendor threads
     for (Vendor vendor : vendorService.getActiveVendors()) {
       Thread thread = new Thread(vendor);
       thread.start();
     }
 
+    // Start customer threads
     for (Customer customer : customerService.getCustomers()) {
       Thread thread = new Thread(customer);
       thread.start();
@@ -73,28 +77,26 @@ public class TicketingService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> stopSimulation() {
+    log.debug("Stopping simulation");
+
+    // Check if simulation is running before stopping it
     if (!started) {
-      log.debug("Failed to stop since the simulation is not running");
+      log.error("Failed to stop since the simulation is not running");
       return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to stop", List.of("Simulation is not running"));
     }
 
+    // Stop vendor threads
     for (Vendor vendor : vendorService.getActiveVendors()) {
       vendor.stop();
     }
 
+    // Start customer threads
     for (Customer customer : customerService.getCustomers()) {
       customer.stop();
     }
 
+    // Set started flag to false as simulation is not running
     setStarted(false);
-
-    try {
-      TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
-      ticketingConfiguration.setTotalTickets(ticketPool.getAvailableTicketCount());
-      FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
-    } catch (IOException ex) {
-      log.error("Error while loading or saving ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
-    }
 
     return new ApiResponse<>(HttpStatus.OK, "Stopped simulation");
   }

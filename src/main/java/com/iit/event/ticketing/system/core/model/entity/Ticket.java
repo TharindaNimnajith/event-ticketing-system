@@ -1,7 +1,7 @@
 package com.iit.event.ticketing.system.core.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iit.event.ticketing.system.core.model.TicketStatus;
+import com.iit.event.ticketing.system.core.enums.TicketStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +12,7 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 
 /**
@@ -21,6 +22,7 @@ import org.springframework.lang.NonNull;
 @Table(name = "tickets")
 @NoArgsConstructor
 @Getter
+@Slf4j
 public class Ticket {
 
   @Id
@@ -49,9 +51,11 @@ public class Ticket {
   /**
    * Ticket constructor
    *
-   * @param vendorId Vendor ID (Not null)
+   * @param vendorId Vendor Id (Not null)
    */
   public Ticket(final @NonNull String vendorId) {
+    log.debug("Creating ticket - Vendor Id: {}", vendorId);
+
     this.id = UUID.randomUUID().toString();
     this.vendorId = vendorId;
     this.status = TicketStatus.AVAILABLE;

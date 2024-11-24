@@ -3,16 +3,13 @@ package com.iit.event.ticketing.system.core.model.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iit.event.ticketing.system.core.model.TicketingConfiguration;
 import com.iit.event.ticketing.system.service.TicketPool;
-import com.iit.event.ticketing.system.util.FileUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.UUID;
 import lombok.Getter;
@@ -33,12 +30,12 @@ import org.springframework.lang.NonNull;
 public class Customer implements Runnable {
 
   @Id
-  @Column(name = "id", nullable = false, updatable = false)
+  @Column(name = "id", nullable = false, updatable = false, unique = true)
   @JsonProperty("id")
   @NonNull
   private String id;
 
-  @Column(name = "name", nullable = false)
+  @Column(name = "name", nullable = false, unique = true)
   @JsonProperty("name")
   @NotBlank
   @NonNull
@@ -46,6 +43,7 @@ public class Customer implements Runnable {
 
   @Column(name = "retrieval_interval", nullable = false, updatable = false)
   @JsonProperty("retrieval_interval")
+  @Setter
   private int retrievalInterval;
 
   @Transient
@@ -61,15 +59,13 @@ public class Customer implements Runnable {
    * Customer constructor
    *
    * @param name Name (Not null)
-   * @throws IOException IOException
    */
   @JsonCreator
-  public Customer(final @NonNull String name) throws IOException {
-    TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
+  public Customer(final @NonNull String name) {
+    log.debug("Creating customer - Name: {};", name);
 
     this.id = UUID.randomUUID().toString();
     this.name = StringUtils.trim(name);
-    this.retrievalInterval = ticketingConfiguration.getCustomerRetrievalRate();
     this.running = true;
   }
 
@@ -78,6 +74,8 @@ public class Customer implements Runnable {
    */
   @Override
   public void run() {
+    log.debug("Running customer - Id: {}; Name: {};", id, name);
+
     while (running) {
       ticketPool.removeTicket(id);
 
@@ -88,12 +86,15 @@ public class Customer implements Runnable {
         Thread.currentThread().interrupt();
       }
     }
+
+    log.debug("Stopping customer - Id: {}; Name: {};", id, name);
   }
 
   /**
    * Stop customer thread from running
    */
   public void stop() {
+    log.debug("Stopping customer thread");
     running = false;
   }
 }

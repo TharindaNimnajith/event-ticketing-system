@@ -1,7 +1,8 @@
 package com.iit.event.ticketing.system.service;
 
+import com.iit.event.ticketing.system.configuration.TicketingConfiguration;
+import com.iit.event.ticketing.system.core.enums.VendorStatus;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
-import com.iit.event.ticketing.system.core.model.VendorStatus;
 import com.iit.event.ticketing.system.core.model.entity.Vendor;
 import com.iit.event.ticketing.system.repository.VendorRepository;
 import java.util.ArrayList;
@@ -21,9 +22,16 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class VendorService {
 
+  @NonNull
+  private final TicketingConfiguration ticketingConfiguration;
+
+  @NonNull
   private final TicketPool ticketPool;
+
+  @NonNull
   private final VendorRepository vendorRepository;
 
+  @NonNull
   @Getter
   private final List<Vendor> activeVendors = new ArrayList<>();
 
@@ -34,14 +42,19 @@ public class VendorService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addVendor(final @NonNull Vendor vendor) {
+    log.debug("Adding vendor - Id: {}; Name: {};", vendor.getId(), vendor.getName());
+
     if (TicketingService.isStarted()) {
-      log.debug("Failed to add vendor since the simulation is currently running");
+      log.debug("Failed to add vendor since the simulation is currently running - Id: {}; Name: {};", vendor.getId(), vendor.getName());
       return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to add vendor", List.of("Simulation is currently running"));
     }
 
+    vendor.setReleaseInterval(ticketingConfiguration.getTicketReleaseRate());
     vendor.setTicketPool(ticketPool);
+
     activeVendors.add(vendor);
     vendorRepository.save(vendor);
+
     return new ApiResponse<>(HttpStatus.OK, "Vendor added successfully");
   }
 
@@ -51,6 +64,7 @@ public class VendorService {
    * @return ApiResponse containing List of Vendor objects (Not null)
    */
   public @NonNull ApiResponse<List<Vendor>> getVendorsList() {
+    log.debug("Fetching vendors list");
     return new ApiResponse<>(HttpStatus.OK, "Vendors fetched successfully", vendorRepository.findAll());
   }
 
@@ -60,9 +74,13 @@ public class VendorService {
    * @param vendor Vendor (Not null)
    */
   public void removeVendor(final @NonNull Vendor vendor) {
-    log.debug("Deactivate vendor with id: {}; name: {};", vendor.getId(), vendor.getName());
-    vendor.setStatus(VendorStatus.INACTIVE);
+    log.debug("Remove vendor with Id: {}; Name: {};", vendor.getId(), vendor.getName());
+
+    // Remove from active vendors list
     activeVendors.remove(vendor);
+
+    // Deactivate vendor status and update database record
+    vendor.setStatus(VendorStatus.INACTIVE);
     vendorRepository.save(vendor);
   }
 
@@ -72,6 +90,7 @@ public class VendorService {
    * @return Active vendor count
    */
   public int getActiveVendorCount() {
+    log.debug("Get active vendor count");
     return activeVendors.size();
   }
 }

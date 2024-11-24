@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class TicketingController {
 
+  @NonNull
   private final TicketingService ticketingService;
 
   /**

@@ -2,8 +2,8 @@ package com.iit.event.ticketing.system.service;
 
 import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
 
+import com.iit.event.ticketing.system.configuration.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
-import com.iit.event.ticketing.system.core.model.TicketingConfiguration;
 import com.iit.event.ticketing.system.util.FileUtils;
 import java.io.IOException;
 import java.util.List;
@@ -24,12 +24,15 @@ public class TicketingConfigurationService {
    *
    * @return ApiResponse containing TicketingConfiguration (Not null)
    */
-  public @NonNull ApiResponse<TicketingConfiguration> getConfigurations() {
+  public @NonNull ApiResponse<TicketingConfiguration> getTicketingConfigurations() {
+    log.debug("Fetching ticketing configurations");
+
     try {
       TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
+      log.debug("Ticketing configurations fetched successfully - File path: {};", TICKETING_CONFIGURATIONS_FILE_PATH);
       return new ApiResponse<>(HttpStatus.OK, "Ticketing configurations fetched successfully", ticketingConfiguration);
     } catch (IOException ex) {
-      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
+      log.error("Error while loading ticketing configurations - File path: {}; Error: {};", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
       return new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch ticketing configurations", List.of(ex.getMessage()));
     }
   }

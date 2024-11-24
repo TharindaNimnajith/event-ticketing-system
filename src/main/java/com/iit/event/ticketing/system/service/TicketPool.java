@@ -1,7 +1,9 @@
 package com.iit.event.ticketing.system.service;
 
-import com.iit.event.ticketing.system.core.model.TicketStatus;
-import com.iit.event.ticketing.system.core.model.TicketingConfiguration;
+import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
+
+import com.iit.event.ticketing.system.configuration.TicketingConfiguration;
+import com.iit.event.ticketing.system.core.enums.TicketStatus;
 import com.iit.event.ticketing.system.core.model.entity.Ticket;
 import com.iit.event.ticketing.system.repository.TicketRepository;
 import com.iit.event.ticketing.system.util.FileUtils;
@@ -9,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -17,84 +20,98 @@ import org.springframework.stereotype.Component;
  * Ticket Pool
  */
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class TicketPool {
 
+  @NonNull
   private final List<Ticket> availableTickets = Collections.synchronizedList(new ArrayList<>());
-  private final int maxCapacity;
 
+  @NonNull
+  private final TicketingConfiguration ticketingConfiguration;
+
+  @NonNull
   private final TicketRepository ticketRepository;
-
-  /**
-   * TicketPool constructor
-   *
-   * @param ticketRepository TicketRepository (Not null)
-   * @throws IOException IOException
-   */
-  public TicketPool(final @NonNull TicketRepository ticketRepository) throws IOException {
-    TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
-    this.maxCapacity = ticketingConfiguration.getMaxTicketCapacity();
-
-    this.ticketRepository = ticketRepository;
-  }
 
   /**
    * Add tickets
    *
-   * @param vendorId          Vendor ID (Not null)
+   * @param vendorId          Vendor Id (Not null)
    * @param ticketsPerRelease Tickets per release
    */
   public synchronized void addTickets(final @NonNull String vendorId, final int ticketsPerRelease) {
-    if (maxCapacity - availableTickets.size() < ticketsPerRelease) {
-      log.error("Not enough capacity to add tickets - Max capacity: {}; Total tickets: {}; Tickets per release: {};",
-          maxCapacity,
+    log.debug("Add tickets - Vendor Id: {}; Tickets per release: {};", vendorId, ticketsPerRelease);
+
+    // Check if there is enough capacity in ticket pool to add tickets
+    if (ticketingConfiguration.getMaxTicketCapacity() - availableTickets.size() < ticketsPerRelease) {
+      log.warn("Adding tickets failed due to insufficient capacity in ticket pool - Vendor Id: {}; Tickets per release: {}; Total tickets: {}; Max capacity: {};",
+          vendorId,
+          ticketsPerRelease,
           availableTickets.size(),
-          ticketsPerRelease
+          ticketingConfiguration.getMaxTicketCapacity()
       );
 
       return;
     }
 
+    // Add tickets to ticket pool
     for (int i = 0; i < ticketsPerRelease; i++) {
       Ticket ticket = new Ticket(vendorId);
       availableTickets.add(ticket);
       ticketRepository.save(ticket);
     }
 
-    log.debug("Add tickets - Vendor Id: {}; Tickets per release: {}; Total tickets: {};",
+    log.debug("Added tickets - Vendor Id: {}; Tickets per release: {}; Total tickets: {}; Max capacity: {};",
         vendorId,
         ticketsPerRelease,
-        availableTickets.size()
+        availableTickets.size(),
+        ticketingConfiguration.getMaxTicketCapacity()
     );
+
+    // Update total tickets ticketing configuration
+    ticketingConfiguration.setTotalTickets(availableTickets.size());
+
+    try {
+      FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
+    } catch (IOException ex) {
+      log.error("Error while saving ticketing configurations - File path: {}; Error: {};", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
+    }
   }
 
   /**
    * Remove ticket
    *
-   * @param customerId Customer ID (Not null)
+   * @param customerId Customer Id (Not null)
    */
   public synchronized void removeTicket(final @NonNull String customerId) {
+    log.debug("Remove ticket - Customer Id: {};", customerId);
+
+    // Check if there are any tickets in the ticket pool to remove
     if (availableTickets.isEmpty()) {
-      log.error("Remove ticket failed - Ticket pool is empty - Customer Id: {}", customerId);
+      log.warn("Removing ticket failed since ticket pool is empty - Customer Id: {}", customerId);
       return;
     }
 
+    // Remove ticket from ticket pool
     Ticket ticket = availableTickets.removeFirst();
     ticket.setCustomerId(customerId);
     ticket.setStatus(TicketStatus.SOLD);
+
     ticketRepository.save(ticket);
 
-    log.debug("Remove ticket - Customer Id: {}; Total tickets: {};", customerId, availableTickets.size());
-  }
+    log.debug("Removed ticket - Customer Id: {}; Total tickets: {}; Max capacity: {};",
+        customerId,
+        availableTickets.size(),
+        ticketingConfiguration.getMaxTicketCapacity()
+    );
 
-  /**
-   * Get available ticket count
-   *
-   * @return Available ticket count
-   */
-  public int getAvailableTicketCount() {
-    synchronized (availableTickets) {
-      return availableTickets.size();
+    // Update total tickets ticketing configuration
+    ticketingConfiguration.setTotalTickets(availableTickets.size());
+
+    try {
+      FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
+    } catch (IOException ex) {
+      log.error("Error while saving ticketing configurations - File path: {}; Error: {};", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
     }
   }
 }

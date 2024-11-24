@@ -3,10 +3,8 @@ package com.iit.event.ticketing.system.core.model.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iit.event.ticketing.system.core.model.TicketingConfiguration;
-import com.iit.event.ticketing.system.core.model.VendorStatus;
+import com.iit.event.ticketing.system.core.enums.VendorStatus;
 import com.iit.event.ticketing.system.service.TicketPool;
-import com.iit.event.ticketing.system.util.FileUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,7 +15,6 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.UUID;
 import lombok.Getter;
@@ -38,12 +35,12 @@ import org.springframework.lang.NonNull;
 public class Vendor implements Runnable {
 
   @Id
-  @Column(name = "id", nullable = false, updatable = false)
+  @Column(name = "id", nullable = false, updatable = false, unique = true)
   @JsonProperty("id")
   @NonNull
   private String id;
 
-  @Column(name = "name", nullable = false)
+  @Column(name = "name", nullable = false, unique = true)
   @JsonProperty("name")
   @NotBlank
   @NonNull
@@ -58,6 +55,7 @@ public class Vendor implements Runnable {
 
   @Column(name = "release_interval", nullable = false, updatable = false)
   @JsonProperty("release_interval")
+  @Setter
   private int releaseInterval;
 
   @Enumerated(EnumType.STRING)
@@ -81,16 +79,14 @@ public class Vendor implements Runnable {
    *
    * @param name              Name (Not null)
    * @param ticketsPerRelease Tickets per release (Not null)
-   * @throws IOException IOException
    */
   @JsonCreator
-  public Vendor(final @NonNull String name, final @NonNull Integer ticketsPerRelease) throws IOException {
-    TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
+  public Vendor(final @NonNull String name, final @NonNull Integer ticketsPerRelease) {
+    log.debug("Creating vendor - Name: {}; Tickets per release: {};", name, ticketsPerRelease);
 
     this.id = UUID.randomUUID().toString();
     this.name = StringUtils.trim(name);
     this.ticketsPerRelease = ticketsPerRelease;
-    this.releaseInterval = ticketingConfiguration.getTicketReleaseRate();
     this.status = VendorStatus.ACTIVE;
     this.running = true;
   }
@@ -100,6 +96,8 @@ public class Vendor implements Runnable {
    */
   @Override
   public void run() {
+    log.debug("Running vendor - Id: {}; Name: {};", id, name);
+
     while (running) {
       ticketPool.addTickets(id, ticketsPerRelease);
 
@@ -110,12 +108,15 @@ public class Vendor implements Runnable {
         Thread.currentThread().interrupt();
       }
     }
+
+    log.debug("Stopping vendor - Id: {}; Name: {};", id, name);
   }
 
   /**
    * Stop vendor thread from running
    */
   public void stop() {
+    log.debug("Stopping vendor thread");
     running = false;
   }
 }

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class VendorController {
 
+  @NonNull
   private final VendorService vendorService;
 
   /**
@@ -34,7 +35,7 @@ public class VendorController {
    */
   @PostMapping
   public @NonNull ResponseEntity<ApiResponse<Object>> addVendor(final @RequestBody @Valid @NonNull Vendor vendor) {
-    log.info("Add vendor");
+    log.info("Add vendor - Id: {}; Name: {}; Tickets per release: {};", vendor.getId(), vendor.getName(), vendor.getTicketsPerRelease());
     ApiResponse<Object> apiResponse = vendorService.addVendor(vendor);
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }
@@ -46,7 +47,7 @@ public class VendorController {
    */
   @GetMapping
   public @NonNull ResponseEntity<ApiResponse<List<Vendor>>> getVendorsList() {
-    log.info("Get vendors");
+    log.info("Get vendors list");
     ApiResponse<List<Vendor>> apiResponse = vendorService.getVendorsList();
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }

@@ -2,16 +2,18 @@ package com.iit.event.ticketing.system.service;
 
 import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
 
-import com.iit.event.ticketing.system.core.model.TicketingConfiguration;
+import com.iit.event.ticketing.system.configuration.TicketingConfiguration;
+import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.Vendor;
 import com.iit.event.ticketing.system.util.FileUtils;
 import java.io.IOException;
 import java.util.Scanner;
-import lombok.NonNull;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,10 +24,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TicketingConfigurationInitializer implements ApplicationRunner {
 
+  @NonNull
   private static final String DEFAULT_VENDOR_NAME = "default_vendor";
+
   private static final int DEFAULT_VENDOR_TICKETS_PER_RELEASE = 1;
 
+  @NonNull
+  private final TicketingConfiguration ticketingConfiguration;
+
+  @NonNull
   private final VendorService vendorService;
+
+  @NonNull
   private final TicketPool ticketPool;
 
   /**
@@ -40,37 +50,41 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
     // Get user inputs for ticketing configurations
     log.info("\nEnter Ticketing Configurations:");
 
+    // Max ticket capacity
     String promptMaxTicketCapacity = "Max Ticket Capacity:";
     int maxTicketCapacity = validateInput(scanner, promptMaxTicketCapacity);
+    ticketingConfiguration.setMaxTicketCapacity(maxTicketCapacity);
 
+    // Total tickets
     String promptTotalTickets = "Total Tickets:";
     int totalTickets = validateInput(scanner, promptTotalTickets, maxTicketCapacity);
+    ticketingConfiguration.setTotalTickets(totalTickets);
 
+    // Ticket release rate
     String promptTicketReleaseRate = "Ticket Release Rate (In Seconds):";
     int ticketReleaseRate = validateInput(scanner, promptTicketReleaseRate);
+    ticketingConfiguration.setTicketReleaseRate(ticketReleaseRate);
 
+    // Customer retrieval rate
     String promptCustomerRetrievalRate = "Customer Retrieval Rate (In Seconds):";
     int customerRetrievalRate = validateInput(scanner, promptCustomerRetrievalRate);
+    ticketingConfiguration.setCustomerRetrievalRate(customerRetrievalRate);
+
+    // Add total tickets to ticket pool
+    addTotalTicketsToTicketPool(ticketingConfiguration.getTotalTickets());
+
+    log.info("\nTicketing configurations:\n{};", ticketingConfiguration);
 
     // Save ticketing configurations to file
-    TicketingConfiguration ticketingConfiguration = new TicketingConfiguration(totalTickets, ticketReleaseRate, customerRetrievalRate, maxTicketCapacity);
-
     try {
       FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
     } catch (IOException ex) {
-      log.error("Error while saving ticketing configurations to file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
+      log.error("Error while saving ticketing configurations - File path: {}; Error: {};", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
     }
-
-    // Print loaded ticketing configurations from file to console
-    printTicketingConfigurations();
-
-    // Add total tickets to ticket pool
-    addTotalTicketsToTicketPool(totalTickets);
   }
 
   /**
-   * <p> Validate to ensure that Total Tickets user input is a non-negative integer not greater than Max Ticket Capacity </p>
-   * <p> Otherwise prompt again with a relevant error message </p>
+   * Validate to ensure that Total Tickets user input is a non-negative integer not greater than Max Ticket Capacity, otherwise prompt again with a relevant error message
    *
    * @param scanner           Scanner (Not null)
    * @param prompt            Prompt (Not null)
@@ -139,48 +153,40 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
   }
 
   /**
-   * Print ticketing configurations loaded from file
-   */
-  private void printTicketingConfigurations() {
-    try {
-      TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
-
-      log.info("\nTicketing Configurations:\n{}: {}\n{}: {}\n{}: {}\n{}: {}",
-          "Max Ticket Capacity", ticketingConfiguration.getMaxTicketCapacity(),
-          "Total Tickets", ticketingConfiguration.getTotalTickets(),
-          "Ticket Release Rate (In Seconds)", ticketingConfiguration.getTicketReleaseRate(),
-          "Customer Retrieval Rate (In Seconds)", ticketingConfiguration.getCustomerRetrievalRate()
-      );
-    } catch (IOException ex) {
-      log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
-    }
-  }
-
-  /**
    * Add total tickets to ticket pool
    *
    * @param totalTickets Total tickets
    */
   private void addTotalTicketsToTicketPool(final int totalTickets) {
-    if (totalTickets > 0) {
-      log.info("Adding default vendor ({}) and total tickets ({}) to ticket pool", DEFAULT_VENDOR_NAME, totalTickets);
+    log.debug("Adding total tickets ({}) to ticket pool", totalTickets);
 
-      try {
-        Vendor vendor = new Vendor(DEFAULT_VENDOR_NAME, DEFAULT_VENDOR_TICKETS_PER_RELEASE);
-        vendorService.addVendor(vendor);
-
-        for (int i = 0; i < totalTickets; i++) {
-          ticketPool.addTickets(vendor.getId(), vendor.getTicketsPerRelease());
-        }
-
-        log.info("Default vendor ({} - {}) and {} tickets added to ticket pool", vendor.getId(), vendor.getName(), ticketPool.getAvailableTicketCount());
-
-        vendorService.removeVendor(vendor);
-
-        log.info("Default vendor ({} - {}) has been deactivated", vendor.getId(), vendor.getName());
-      } catch (IOException ex) {
-        log.error("Error while loading ticketing configurations from file ({}) - Error: {}", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
-      }
+    // No need to add default vendor or tickets to the ticket pool if there are no tickets
+    if (totalTickets <= 0) {
+      log.debug("No tickets added to ticket pool since total tickets input is not positive");
+      return;
     }
+
+    // Add default vendor
+    Vendor vendor = new Vendor(DEFAULT_VENDOR_NAME, DEFAULT_VENDOR_TICKETS_PER_RELEASE);
+    ApiResponse<Object> apiResponse = vendorService.addVendor(vendor);
+
+    // Handle failure cases when adding default vendor
+    if (!apiResponse.getHttpStatus().is2xxSuccessful()) {
+      log.error("Error adding default vendor to ticket pool - HTTP Status: {}; Message: {};\nErrors: {};",
+          apiResponse.getHttpStatus(),
+          apiResponse.getMessage(),
+          apiResponse.getErrors() != null ? apiResponse.getErrors().stream().collect(Collectors.joining(", ", "[", "]")) : null
+      );
+
+      return;
+    }
+
+    // Add total tickets with default vendor
+    for (int i = 0; i < totalTickets; i++) {
+      ticketPool.addTickets(vendor.getId(), vendor.getTicketsPerRelease());
+    }
+
+    // Deactivate default vendor
+    vendorService.removeVendor(vendor);
   }
 }
