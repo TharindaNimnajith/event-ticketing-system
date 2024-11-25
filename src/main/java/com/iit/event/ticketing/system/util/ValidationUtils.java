@@ -22,10 +22,7 @@ public class ValidationUtils {
    * @return List of error messages if one or more failures found, otherwise empty list (Not null)
    */
   public static @NonNull List<String> validatePrerequisitesToStartSimulation(final int activeVendorCount, final int customerCount) {
-    log.debug("Validating prerequisites to start simulation - Active vendor count: {}; Customer count: {};",
-        activeVendorCount,
-        customerCount
-    );
+    log.debug("Validating prerequisites to start simulation - Active vendor count: {}; Customer count: {};", activeVendorCount, customerCount);
 
     List<String> errors = new ArrayList<>();
 

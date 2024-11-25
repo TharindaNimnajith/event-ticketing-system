@@ -76,15 +76,13 @@ public class Vendor implements Runnable {
    */
   @JsonCreator
   public Vendor(final @NonNull String id, final @NonNull Integer ticketsPerRelease) {
-    log.debug("Creating vendor - Id: {}; Tickets per release: {};",
-        id,
-        ticketsPerRelease
-    );
+    log.debug("Creating vendor - Id: {}; Tickets per release: {};", id, ticketsPerRelease);
 
     this.id = StringUtils.trim(id);
     this.ticketsPerRelease = ticketsPerRelease;
     this.status = VendorStatus.ACTIVE;
-    this.running = true;
+
+    running = true;
   }
 
   /**
@@ -92,32 +90,27 @@ public class Vendor implements Runnable {
    */
   @Override
   public void run() {
-    log.debug("Running vendor thread start - Id: {};", id);
+    log.debug("Running vendor thread start - Id: {};", this.id);
 
     while (running) {
-      ticketPool.addTickets(id, ticketsPerRelease);
+      ticketPool.addTickets(this.id, this.ticketsPerRelease);
 
       try {
-        Thread.sleep(Duration.ofSeconds(releaseInterval));
+        Thread.sleep(Duration.ofSeconds(this.releaseInterval));
       } catch (InterruptedException ex) {
-        log.error("Vendor thread is interrupted while sleeping - Id: {}; Error: {};",
-            id,
-            ex.getMessage(),
-            ex
-        );
-
+        log.error("Vendor thread is interrupted while sleeping - Id: {}; Error: {};", this.id, ex.getMessage(), ex);
         Thread.currentThread().interrupt();
       }
     }
 
-    log.debug("Running vendor thread end - Id: {};", id);
+    log.debug("Running vendor thread end - Id: {};", this.id);
   }
 
   /**
    * Stop vendor thread from running
    */
   public void stop() {
-    log.debug("Stop vendor thread - Id: {};", id);
+    log.debug("Stop vendor thread - Id: {};", this.id);
     running = false;
   }
 }

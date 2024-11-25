@@ -57,9 +57,8 @@ public class Customer implements Runnable {
   @JsonCreator
   public Customer(final @NonNull String id) {
     log.debug("Creating customer - Id: {};", id);
-
     this.id = StringUtils.trim(id);
-    this.running = true;
+    running = true;
   }
 
   /**
@@ -67,32 +66,27 @@ public class Customer implements Runnable {
    */
   @Override
   public void run() {
-    log.debug("Running customer thread start - Id: {};", id);
+    log.debug("Running customer thread start - Id: {};", this.id);
 
     while (running) {
-      ticketPool.removeTicket(id);
+      ticketPool.removeTicket(this.id);
 
       try {
-        Thread.sleep(Duration.ofSeconds(retrievalInterval));
+        Thread.sleep(Duration.ofSeconds(this.retrievalInterval));
       } catch (InterruptedException ex) {
-        log.error("Customer thread is interrupted while sleeping - Id: {}; Error: {};",
-            id,
-            ex.getMessage(),
-            ex
-        );
-
+        log.error("Customer thread is interrupted while sleeping - Id: {}; Error: {};", this.id, ex.getMessage(), ex);
         Thread.currentThread().interrupt();
       }
     }
 
-    log.debug("Running customer thread end - Id: {};", id);
+    log.debug("Running customer thread end - Id: {};", this.id);
   }
 
   /**
    * Stop customer thread from running
    */
   public void stop() {
-    log.debug("Stop customer thread - Id: {};", id);
+    log.debug("Stop customer thread - Id: {};", this.id);
     running = false;
   }
 }
