@@ -66,7 +66,7 @@ public class Customer implements Runnable {
    */
   @Override
   public void run() {
-    log.debug("Running customer thread start - Id: {};", this.id);
+    log.debug("Running customer thread begin - Id: {};", this.id);
 
     while (running) {
       ticketPool.removeTicket(this.id);

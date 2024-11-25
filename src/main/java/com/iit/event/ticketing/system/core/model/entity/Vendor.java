@@ -90,7 +90,7 @@ public class Vendor implements Runnable {
    */
   @Override
   public void run() {
-    log.debug("Running vendor thread start - Id: {};", this.id);
+    log.debug("Running vendor thread begin - Id: {};", this.id);
 
     while (running) {
       ticketPool.addTickets(this.id, this.ticketsPerRelease);

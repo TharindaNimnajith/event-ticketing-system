@@ -79,11 +79,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
     try {
       FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
     } catch (IOException ex) {
-      log.error("Error while saving ticketing configurations - File path: {}; Error: {};",
-          TICKETING_CONFIGURATIONS_FILE_PATH,
-          ex.getMessage(),
-          ex
-      );
+      log.error("Error while saving ticketing configurations - File path: {}; Error: {};", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
     }
   }
 
@@ -121,11 +117,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
 
     // Check if total tickets user input is not greater than max ticket capacity
     if (totalTickets > maxTicketCapacity) {
-      log.warn("\nInvalid input (Total tickets should not be greater than max ticket capacity) - Total tickets: {}; Max ticket capacity: {};",
-          totalTickets,
-          maxTicketCapacity
-      );
-
+      log.warn("\nInvalid input (Total tickets should not be greater than max ticket capacity) - Total tickets: {}; Max ticket capacity: {};", totalTickets, maxTicketCapacity);
       totalTickets = validateInput(scanner, prompt, maxTicketCapacity);
     }
 

@@ -88,7 +88,7 @@ public class TicketPool {
 
     // Check if there are any tickets in the ticket pool to remove
     if (availableTickets.isEmpty()) {
-      log.warn("Removing ticket failed since ticket pool is empty - Customer Id: {}", customerId);
+      log.warn("Removing ticket failed since ticket pool is empty - Customer Id: {};", customerId);
       return;
     }
 

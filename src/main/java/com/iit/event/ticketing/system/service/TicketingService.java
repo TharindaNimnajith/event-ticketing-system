@@ -42,19 +42,14 @@ public class TicketingService {
     // Check if simulation is not running before starting it
     if (started) {
       log.error("Failed to start since the simulation is already running");
-
-      return new ApiResponse<>(
-          HttpStatus.CONFLICT,
-          "Failed to start",
-          List.of("Simulation is already running")
-      );
+      return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to start", List.of("Simulation is already running"));
     }
 
     // Validate if the system has one or more customers and active vendors to start simulation
     List<String> errors = ValidationUtils.validateStartSimulation(vendorService.getActiveVendors().size(), customerService.getCustomers().size());
 
     if (!errors.isEmpty()) {
-      log.error("Failed to start due to missing prerequisites - {}", String.join(", ", errors));
+      log.error("Failed to start due to missing prerequisites - {};", String.join(", ", errors));
       return new ApiResponse<>(HttpStatus.UNPROCESSABLE_ENTITY, "Failed to start due to missing prerequisites", errors);
     }
 
@@ -65,12 +60,14 @@ public class TicketingService {
     for (Vendor vendor : vendorService.getActiveVendors()) {
       Thread thread = new Thread(vendor);
       thread.start();
+      log.trace("Started vendor thread - Id: {};", vendor.getId());
     }
 
     // Start customer threads
     for (Customer customer : customerService.getCustomers()) {
       Thread thread = new Thread(customer);
       thread.start();
+      log.trace("Started customer thread - Id: {};", customer.getId());
     }
 
     return new ApiResponse<>(HttpStatus.OK, "Started simulation");
@@ -93,11 +90,13 @@ public class TicketingService {
     // Stop vendor threads
     for (Vendor vendor : vendorService.getActiveVendors()) {
       vendor.stop();
+      log.trace("Stopped vendor thread - Id: {};", vendor.getId());
     }
 
     // Start customer threads
     for (Customer customer : customerService.getCustomers()) {
       customer.stop();
+      log.trace("Stopped customer thread - Id: {};", customer.getId());
     }
 
     // Set started flag to false as simulation is not running
