@@ -65,31 +65,31 @@ public class Customer implements Runnable {
    */
   @Override
   public void run() {
-    log.debug("Running customer thread begin - Id: {};", this.id);
+    log.debug("Running customer thread begin - Id: {};", id);
 
     // Set running flag to true once customer thread is started
     running = true;
 
     // Retrieve tickets in a loop until the customer thread is stopped or interrupted
     while (running) {
-      ticketPool.removeTicket(this.id);
+      ticketPool.removeTicket(id);
 
       try {
-        Thread.sleep(Duration.ofSeconds(this.retrievalInterval));
+        Thread.sleep(Duration.ofSeconds(retrievalInterval));
       } catch (InterruptedException ex) {
-        log.error("Customer thread is interrupted while sleeping - Id: {}; Error: {};", this.id, ex.getMessage(), ex);
+        log.error("Customer thread is interrupted while sleeping - Id: {}; Error: {};", id, ex.getMessage(), ex);
         Thread.currentThread().interrupt();
       }
     }
 
-    log.debug("Running customer thread end - Id: {};", this.id);
+    log.debug("Running customer thread end - Id: {};", id);
   }
 
   /**
    * Stop customer thread from running
    */
   public void stop() {
-    log.debug("Stop customer thread - Id: {};", this.id);
+    log.debug("Stop customer thread - Id: {};", id);
     running = false;
   }
 }

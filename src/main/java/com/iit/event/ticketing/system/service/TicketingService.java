@@ -4,6 +4,7 @@ import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.Customer;
 import com.iit.event.ticketing.system.core.model.entity.Vendor;
 import com.iit.event.ticketing.system.util.ValidationUtils;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -32,6 +33,9 @@ public class TicketingService {
   @NonNull
   private final CustomerService customerService;
 
+  private List<Thread> vendorThreads;
+  private List<Thread> customerThreads;
+
   /**
    * Start simulation
    *
@@ -54,23 +58,41 @@ public class TicketingService {
       return new ApiResponse<>(HttpStatus.UNPROCESSABLE_ENTITY, "Failed to start", errors);
     }
 
+    // Initialize vendor and customer thread lists
+    vendorThreads = new ArrayList<>();
+    customerThreads = new ArrayList<>();
+
     // Set started flag to true as simulation is running
     setStarted(true);
 
-    // Start vendor threads
+    // Create vendor threads and add to vendor threads list
     for (Vendor vendor : vendorService.getActiveVendors()) {
       Thread thread = new Thread(vendor);
-      thread.start();
+      thread.setName(vendor.getId());
+      vendorThreads.add(thread);
+    }
 
-      log.trace("Started vendor thread - Id: {};", vendor.getId());
+    log.trace("Created vendor threads - Count: {};", vendorThreads.size());
+
+    // Create customer threads and add to customer threads list
+    for (Customer customer : customerService.getCustomers()) {
+      Thread thread = new Thread(customer);
+      thread.setName(customer.getId());
+      customerThreads.add(thread);
+    }
+
+    log.trace("Created customer threads - Count: {};", customerThreads.size());
+
+    // Start vendor threads
+    for (Thread vendorThread : vendorThreads) {
+      vendorThread.start();
+      log.trace("Started vendor thread - Id: {};", vendorThread.getName());
     }
 
     // Start customer threads
-    for (Customer customer : customerService.getCustomers()) {
-      Thread thread = new Thread(customer);
-      thread.start();
-
-      log.trace("Started customer thread - Id: {};", customer.getId());
+    for (Thread customerThread : customerThreads) {
+      customerThread.start();
+      log.trace("Started customer thread - Id: {};", customerThread.getName());
     }
 
     return new ApiResponse<>(HttpStatus.OK, "Started simulation");
@@ -96,11 +118,37 @@ public class TicketingService {
       log.trace("Stopped vendor thread - Id: {};", vendor.getId());
     }
 
-    // Start customer threads
+    // Stop customer threads
     for (Customer customer : customerService.getCustomers()) {
       customer.stop();
       log.trace("Stopped customer thread - Id: {};", customer.getId());
     }
+
+    // Join vendor threads
+    for (Thread vendorThread : vendorThreads) {
+      try {
+        vendorThread.join();
+        log.trace("Joined vendor thread - Id: {};", vendorThread.getName());
+      } catch (InterruptedException ex) {
+        log.error("Error joining vendor thread - Id: {}; Error: {};", vendorThread.getName(), ex.getMessage(), ex);
+        Thread.currentThread().interrupt();
+      }
+    }
+
+    // Join customer threads
+    for (Thread customerThread : customerThreads) {
+      try {
+        customerThread.join();
+        log.trace("Joined customer thread - Id: {};", customerThread.getName());
+      } catch (InterruptedException ex) {
+        log.error("Error joining customer thread - Id: {}; Error: {};", customerThread.getName(), ex.getMessage(), ex);
+        Thread.currentThread().interrupt();
+      }
+    }
+
+    // Clear thread lists after joining
+    vendorThreads.clear();
+    customerThreads.clear();
 
     // Set started flag to false as simulation is not running
     setStarted(false);

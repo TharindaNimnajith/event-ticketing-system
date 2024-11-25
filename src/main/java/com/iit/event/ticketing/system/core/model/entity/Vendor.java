@@ -88,31 +88,31 @@ public class Vendor implements Runnable {
    */
   @Override
   public void run() {
-    log.debug("Running vendor thread begin - Id: {};", this.id);
+    log.debug("Running vendor thread begin - Id: {};", id);
 
     // Set running flag to true once vendor thread is started
     running = true;
 
     // Release tickets in a loop until the vendor thread is stopped or interrupted
     while (running) {
-      ticketPool.addTickets(this.id, this.ticketsPerRelease);
+      ticketPool.addTickets(id, ticketsPerRelease);
 
       try {
-        Thread.sleep(Duration.ofSeconds(this.releaseInterval));
+        Thread.sleep(Duration.ofSeconds(releaseInterval));
       } catch (InterruptedException ex) {
-        log.error("Vendor thread is interrupted while sleeping - Id: {}; Error: {};", this.id, ex.getMessage(), ex);
+        log.error("Vendor thread is interrupted while sleeping - Id: {}; Error: {};", id, ex.getMessage(), ex);
         Thread.currentThread().interrupt();
       }
     }
 
-    log.debug("Running vendor thread end - Id: {};", this.id);
+    log.debug("Running vendor thread end - Id: {};", id);
   }
 
   /**
    * Stop vendor thread from running
    */
   public void stop() {
-    log.debug("Stop vendor thread - Id: {};", this.id);
+    log.debug("Stop vendor thread - Id: {};", id);
     running = false;
   }
 }
