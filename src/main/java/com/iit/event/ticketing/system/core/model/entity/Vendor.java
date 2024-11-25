@@ -40,7 +40,7 @@ public class Vendor implements Runnable {
   @NonNull
   private String id;
 
-  @Column(name = "tickets_per_release", nullable = false)
+  @Column(name = "tickets_per_release", nullable = false, updatable = false)
   @JsonProperty("tickets_per_release")
   @NotNull
   @NonNull

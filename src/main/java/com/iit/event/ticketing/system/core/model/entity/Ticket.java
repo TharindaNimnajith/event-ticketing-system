@@ -26,7 +26,7 @@ import org.springframework.lang.NonNull;
 public class Ticket {
 
   @Id
-  @Column(name = "id", nullable = false, updatable = false)
+  @Column(name = "id", nullable = false, updatable = false, unique = true)
   @JsonProperty("id")
   @NonNull
   private String id;
