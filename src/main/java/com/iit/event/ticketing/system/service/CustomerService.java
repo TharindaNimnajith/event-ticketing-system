@@ -44,6 +44,12 @@ public class CustomerService {
   public @NonNull ApiResponse<Object> addCustomer(final @NonNull Customer customer) {
     log.debug("Adding customer - Id: {};", customer.getId());
 
+    // Check if the customer already exists in the database
+    if (customerRepository.existsById(customer.getId())) {
+      log.error("Failed to add customer since a customer with the same Id already exists in the database - Id: {};", customer.getId());
+      return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Failed to add customer", List.of("A customer with the same Id already exists in the database"));
+    }
+
     // Check if simulation is not running before adding the new customer
     if (TicketingService.isStarted()) {
       log.error("Failed to add customer since the simulation is currently running - Id: {};", customer.getId());

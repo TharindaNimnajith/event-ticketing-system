@@ -56,6 +56,12 @@ public class VendorService {
       return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Failed to add vendor", List.of("Tickets per release is greater than max ticket capacity"));
     }
 
+    // Check if the vendor already exists in the database
+    if (vendorRepository.existsById(vendor.getId())) {
+      log.error("Failed to add vendor since a vendor with the same Id already exists in the database - Id: {};", vendor.getId());
+      return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Failed to add vendor", List.of("A vendor with the same Id already exists in the database"));
+    }
+
     // Check if simulation is not running before adding the new vendor
     if (TicketingService.isStarted()) {
       log.error("Failed to add vendor since the simulation is currently running - Id: {};", vendor.getId());
