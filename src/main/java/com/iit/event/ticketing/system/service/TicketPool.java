@@ -54,7 +54,7 @@ public class TicketPool {
       return;
     }
 
-    // Add tickets to ticket pool
+    // Add tickets to ticket pool and save in database
     for (int i = 0; i < ticketsPerRelease; i++) {
       Ticket ticket = new Ticket(vendorId);
       availableTickets.add(ticket);
@@ -92,7 +92,7 @@ public class TicketPool {
       return;
     }
 
-    // Remove ticket from ticket pool
+    // Remove ticket from ticket pool and update database record
     Ticket ticket = availableTickets.removeFirst();
     ticket.setCustomerId(customerId);
     ticket.setStatus(TicketStatus.SOLD);

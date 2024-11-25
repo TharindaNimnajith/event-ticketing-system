@@ -53,7 +53,7 @@ public class CustomerService {
     customer.setRetrievalInterval(ticketingConfiguration.getCustomerRetrievalRate());
     customer.setTicketPool(ticketPool);
 
-    // Add customer to active customers list and save in database
+    // Add customer to customers list and save in database
     customers.add(customer);
     customerRepository.save(customer);
 
