@@ -1,4 +1,4 @@
-package com.iit.event.ticketing.system.configuration
+package com.iit.event.ticketing.system.service.ticketing.configurations
 
 import spock.lang.Specification
 
@@ -12,12 +12,11 @@ class TicketingConfigurationSpec extends Specification {
      */
     def "toString - Should return a String representation of ticketing configurations"() {
         given:
-        TicketingConfiguration ticketingConfiguration = TicketingConfiguration.builder()
-                .maxTicketCapacity(100)
-                .totalTickets(10)
-                .ticketReleaseRate(20)
-                .customerRetrievalRate(30)
-                .build()
+        TicketingConfiguration ticketingConfiguration = new TicketingConfiguration()
+        ticketingConfiguration.setMaxTicketCapacity(100)
+        ticketingConfiguration.setTotalTickets(10)
+        ticketingConfiguration.setTicketReleaseRate(20)
+        ticketingConfiguration.setCustomerRetrievalRate(30)
 
         when:
         String result = ticketingConfiguration.toString()

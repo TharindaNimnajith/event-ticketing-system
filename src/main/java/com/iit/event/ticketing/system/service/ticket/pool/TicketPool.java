@@ -1,11 +1,11 @@
-package com.iit.event.ticketing.system.service;
+package com.iit.event.ticketing.system.service.ticket.pool;
 
 import static com.iit.event.ticketing.system.core.CommonConstants.TICKETING_CONFIGURATIONS_FILE_PATH;
 
-import com.iit.event.ticketing.system.configuration.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.enums.TicketStatus;
 import com.iit.event.ticketing.system.core.model.entity.Ticket;
 import com.iit.event.ticketing.system.repository.TicketRepository;
+import com.iit.event.ticketing.system.service.ticketing.configurations.TicketingConfiguration;
 import com.iit.event.ticketing.system.util.FileUtils;
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,10 +1,11 @@
 package com.iit.event.ticketing.system.service;
 
-import com.iit.event.ticketing.system.configuration.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.enums.VendorStatus;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.Vendor;
 import com.iit.event.ticketing.system.repository.VendorRepository;
+import com.iit.event.ticketing.system.service.ticket.pool.TicketPool;
+import com.iit.event.ticketing.system.service.ticketing.configurations.TicketingConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -43,6 +44,17 @@ public class VendorService {
    */
   public @NonNull ApiResponse<Object> addVendor(final @NonNull Vendor vendor) {
     log.debug("Adding vendor - Id: {};", vendor.getId());
+
+    // Check if tickets per release is less than or equal to max ticket capacity
+    if (vendor.getTicketsPerRelease() > ticketingConfiguration.getMaxTicketCapacity()) {
+      log.error("Failed to add vendor since tickets per release is greater than max ticket capacity - Id: {}; Tickets per release: {}; Max ticket capacity: {};",
+          vendor.getId(),
+          vendor.getTicketsPerRelease(),
+          ticketingConfiguration.getMaxTicketCapacity()
+      );
+
+      return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Failed to add vendor", List.of("Tickets per release is greater than max ticket capacity"));
+    }
 
     // Check if simulation is not running before adding the new vendor
     if (TicketingService.isStarted()) {

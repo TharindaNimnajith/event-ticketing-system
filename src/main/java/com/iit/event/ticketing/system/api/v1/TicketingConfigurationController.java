@@ -1,8 +1,8 @@
 package com.iit.event.ticketing.system.api.v1;
 
-import com.iit.event.ticketing.system.configuration.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.service.TicketingConfigurationService;
+import com.iit.event.ticketing.system.service.ticketing.configurations.TicketingConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

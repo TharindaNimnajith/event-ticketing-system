@@ -1,9 +1,10 @@
 package com.iit.event.ticketing.system.service;
 
-import com.iit.event.ticketing.system.configuration.TicketingConfiguration;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.Customer;
 import com.iit.event.ticketing.system.repository.CustomerRepository;
+import com.iit.event.ticketing.system.service.ticket.pool.TicketPool;
+import com.iit.event.ticketing.system.service.ticketing.configurations.TicketingConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;

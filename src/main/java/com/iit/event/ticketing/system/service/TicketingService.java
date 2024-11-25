@@ -50,7 +50,7 @@ public class TicketingService {
 
     if (!errors.isEmpty()) {
       log.error("Failed to start due to missing prerequisites - {};", String.join(", ", errors));
-      return new ApiResponse<>(HttpStatus.UNPROCESSABLE_ENTITY, "Failed to start due to missing prerequisites", errors);
+      return new ApiResponse<>(HttpStatus.UNPROCESSABLE_ENTITY, "Failed to start", errors);
     }
 
     // Set started flag to true as simulation is running

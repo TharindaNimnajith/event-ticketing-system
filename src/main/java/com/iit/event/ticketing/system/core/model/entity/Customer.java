@@ -3,7 +3,7 @@ package com.iit.event.ticketing.system.core.model.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iit.event.ticketing.system.service.TicketPool;
+import com.iit.event.ticketing.system.service.ticket.pool.TicketPool;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -58,7 +58,6 @@ public class Customer implements Runnable {
   public Customer(final @NonNull String id) {
     log.debug("Creating customer - Id: {};", id);
     this.id = StringUtils.trim(id);
-    running = true;
   }
 
   /**
@@ -68,6 +67,10 @@ public class Customer implements Runnable {
   public void run() {
     log.debug("Running customer thread begin - Id: {};", this.id);
 
+    // Set running flag to true once customer thread is started
+    running = true;
+
+    // Retrieve tickets in a loop until the customer thread is stopped or interrupted
     while (running) {
       ticketPool.removeTicket(this.id);
 

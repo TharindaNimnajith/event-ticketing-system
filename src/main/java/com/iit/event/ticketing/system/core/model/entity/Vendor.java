@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iit.event.ticketing.system.core.enums.VendorStatus;
-import com.iit.event.ticketing.system.service.TicketPool;
+import com.iit.event.ticketing.system.service.ticket.pool.TicketPool;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -81,8 +81,6 @@ public class Vendor implements Runnable {
     this.id = StringUtils.trim(id);
     this.ticketsPerRelease = ticketsPerRelease;
     this.status = VendorStatus.ACTIVE;
-
-    running = true;
   }
 
   /**
@@ -92,6 +90,10 @@ public class Vendor implements Runnable {
   public void run() {
     log.debug("Running vendor thread begin - Id: {};", this.id);
 
+    // Set running flag to true once vendor thread is started
+    running = true;
+
+    // Release tickets in a loop until the vendor thread is stopped or interrupted
     while (running) {
       ticketPool.addTickets(this.id, this.ticketsPerRelease);
 
