@@ -60,7 +60,7 @@ public class CustomerService {
 
     log.trace("Added customer - Id: {};", customer.getId());
 
-    return new ApiResponse<>(HttpStatus.OK, "Customer added successfully");
+    return new ApiResponse<>(HttpStatus.CREATED, "Customer added successfully");
   }
 
   /**

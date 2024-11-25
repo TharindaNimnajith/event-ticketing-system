@@ -72,7 +72,7 @@ public class VendorService {
 
     log.trace("Added vendor - Id: {};", vendor.getId());
 
-    return new ApiResponse<>(HttpStatus.OK, "Vendor added successfully");
+    return new ApiResponse<>(HttpStatus.CREATED, "Vendor added successfully");
   }
 
   /**
