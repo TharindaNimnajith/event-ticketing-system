@@ -31,7 +31,7 @@ public class FileUtils {
   public static void saveTicketingConfigurationsToFile(final @NonNull TicketingConfiguration ticketingConfiguration) throws IOException {
     ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
     writer.writeValue(new File(TICKETING_CONFIGURATIONS_FILE_PATH), ticketingConfiguration);
-    log.debug("Ticketing configurations saved successfully - File path: {};\nTicketing configurations:\n{};", TICKETING_CONFIGURATIONS_FILE_PATH, ticketingConfiguration);
+    log.trace("Ticketing configurations saved successfully - File path: {};\nTicketing configurations:\n{};", TICKETING_CONFIGURATIONS_FILE_PATH, ticketingConfiguration);
   }
 
   /**
@@ -42,7 +42,7 @@ public class FileUtils {
    */
   public static @NonNull TicketingConfiguration loadTicketingConfigurationsFromFile() throws IOException {
     TicketingConfiguration ticketingConfiguration = objectMapper.readValue(new File(TICKETING_CONFIGURATIONS_FILE_PATH), TicketingConfiguration.class);
-    log.debug("Ticketing configurations loaded successfully - File path: {};\nTicketing configurations:\n{};", TICKETING_CONFIGURATIONS_FILE_PATH, ticketingConfiguration);
+    log.trace("Ticketing configurations loaded successfully - File path: {};\nTicketing configurations:\n{};", TICKETING_CONFIGURATIONS_FILE_PATH, ticketingConfiguration);
     return ticketingConfiguration;
   }
 }

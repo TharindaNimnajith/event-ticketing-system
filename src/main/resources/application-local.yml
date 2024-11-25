@@ -1,0 +1,3 @@
+logging:
+  level:
+    com.iit.event.ticketing.system: trace
