@@ -47,12 +47,7 @@ public class VendorService {
     // Check if simulation is not running before adding the new vendor
     if (TicketingService.isStarted()) {
       log.error("Failed to add vendor since the simulation is currently running - Id: {};", vendor.getId());
-
-      return new ApiResponse<>(
-          HttpStatus.CONFLICT,
-          "Failed to add vendor",
-          List.of("Simulation is currently running")
-      );
+      return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to add vendor", List.of("Simulation is currently running"));
     }
 
     // Set release interval ticketing configuration and ticket pool
@@ -63,10 +58,7 @@ public class VendorService {
     activeVendors.add(vendor);
     vendorRepository.save(vendor);
 
-    return new ApiResponse<>(
-        HttpStatus.OK,
-        "Vendor added successfully"
-    );
+    return new ApiResponse<>(HttpStatus.OK, "Vendor added successfully");
   }
 
   /**
@@ -76,12 +68,7 @@ public class VendorService {
    */
   public @NonNull ApiResponse<List<Vendor>> getVendorsList() {
     log.debug("Fetching vendors list");
-
-    return new ApiResponse<>(
-        HttpStatus.OK,
-        "Vendors fetched successfully",
-        vendorRepository.findAll()
-    );
+    return new ApiResponse<>(HttpStatus.OK, "Vendors fetched successfully", vendorRepository.findAll());
   }
 
   /**
@@ -98,15 +85,5 @@ public class VendorService {
     // Deactivate vendor status and update database record
     vendor.setStatus(VendorStatus.INACTIVE);
     vendorRepository.save(vendor);
-  }
-
-  /**
-   * Get active vendor count
-   *
-   * @return Active vendor count
-   */
-  public int getActiveVendorCount() {
-    log.debug("Get active vendor count");
-    return activeVendors.size();
   }
 }

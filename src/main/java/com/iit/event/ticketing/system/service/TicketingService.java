@@ -50,17 +50,12 @@ public class TicketingService {
       );
     }
 
-    // Validate prerequisites (system has customers and active vendors) to start simulation
-    List<String> errors = ValidationUtils.validatePrerequisitesToStartSimulation(vendorService.getActiveVendorCount(), customerService.getCustomerCount());
+    // Validate if the system has one or more customers and active vendors to start simulation
+    List<String> errors = ValidationUtils.validateStartSimulation(vendorService.getActiveVendors().size(), customerService.getCustomers().size());
 
     if (!errors.isEmpty()) {
       log.error("Failed to start due to missing prerequisites - {}", String.join(", ", errors));
-
-      return new ApiResponse<>(
-          HttpStatus.UNPROCESSABLE_ENTITY,
-          "Failed to start due to missing prerequisites",
-          errors
-      );
+      return new ApiResponse<>(HttpStatus.UNPROCESSABLE_ENTITY, "Failed to start due to missing prerequisites", errors);
     }
 
     // Set started flag to true as simulation is running
@@ -78,10 +73,7 @@ public class TicketingService {
       thread.start();
     }
 
-    return new ApiResponse<>(
-        HttpStatus.OK,
-        "Started simulation"
-    );
+    return new ApiResponse<>(HttpStatus.OK, "Started simulation");
   }
 
   /**
@@ -95,12 +87,7 @@ public class TicketingService {
     // Check if simulation is running before stopping it
     if (!started) {
       log.error("Failed to stop since the simulation is not running");
-
-      return new ApiResponse<>(
-          HttpStatus.CONFLICT,
-          "Failed to stop",
-          List.of("Simulation is not running")
-      );
+      return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to stop", List.of("Simulation is not running"));
     }
 
     // Stop vendor threads
@@ -116,9 +103,6 @@ public class TicketingService {
     // Set started flag to false as simulation is not running
     setStarted(false);
 
-    return new ApiResponse<>(
-        HttpStatus.OK,
-        "Stopped simulation"
-    );
+    return new ApiResponse<>(HttpStatus.OK, "Stopped simulation");
   }
 }

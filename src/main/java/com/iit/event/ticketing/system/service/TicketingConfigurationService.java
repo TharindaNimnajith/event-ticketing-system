@@ -29,29 +29,11 @@ public class TicketingConfigurationService {
 
     try {
       TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
-
-      log.debug("Ticketing configurations fetched successfully - File path: {};\nTicketing configurations:\n{};",
-          TICKETING_CONFIGURATIONS_FILE_PATH,
-          ticketingConfiguration
-      );
-
-      return new ApiResponse<>(
-          HttpStatus.OK,
-          "Ticketing configurations fetched successfully",
-          ticketingConfiguration
-      );
+      log.debug("Ticketing configurations fetched successfully - File path: {};\nTicketing configurations:\n{};", TICKETING_CONFIGURATIONS_FILE_PATH, ticketingConfiguration);
+      return new ApiResponse<>(HttpStatus.OK, "Ticketing configurations fetched successfully", ticketingConfiguration);
     } catch (IOException ex) {
-      log.error("Error while loading ticketing configurations - File path: {}; Error: {};",
-          TICKETING_CONFIGURATIONS_FILE_PATH,
-          ex.getMessage(),
-          ex
-      );
-
-      return new ApiResponse<>(
-          HttpStatus.INTERNAL_SERVER_ERROR,
-          "Failed to fetch ticketing configurations",
-          List.of(ex.getMessage())
-      );
+      log.error("Error while loading ticketing configurations - File path: {}; Error: {};", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
+      return new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch ticketing configurations", List.of(ex.getMessage()));
     }
   }
 }

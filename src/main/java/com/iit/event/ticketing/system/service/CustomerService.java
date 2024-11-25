@@ -46,12 +46,7 @@ public class CustomerService {
     // Check if simulation is not running before adding the new customer
     if (TicketingService.isStarted()) {
       log.error("Failed to add customer since the simulation is currently running - Id: {};", customer.getId());
-
-      return new ApiResponse<>(
-          HttpStatus.CONFLICT,
-          "Failed to add customer",
-          List.of("Simulation is currently running")
-      );
+      return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to add customer", List.of("Simulation is currently running"));
     }
 
     // Set retrieval interval ticketing configuration and ticket pool
@@ -62,10 +57,7 @@ public class CustomerService {
     customers.add(customer);
     customerRepository.save(customer);
 
-    return new ApiResponse<>(
-        HttpStatus.OK,
-        "Customer added successfully"
-    );
+    return new ApiResponse<>(HttpStatus.OK, "Customer added successfully");
   }
 
   /**
@@ -75,21 +67,6 @@ public class CustomerService {
    */
   public @NonNull ApiResponse<List<Customer>> getCustomersList() {
     log.debug("Fetching customers list");
-
-    return new ApiResponse<>(
-        HttpStatus.OK,
-        "Customers fetched successfully",
-        customerRepository.findAll()
-    );
-  }
-
-  /**
-   * Get customer count
-   *
-   * @return Customer count
-   */
-  public int getCustomerCount() {
-    log.debug("Get customer count");
-    return customers.size();
+    return new ApiResponse<>(HttpStatus.OK, "Customers fetched successfully", customerRepository.findAll());
   }
 }

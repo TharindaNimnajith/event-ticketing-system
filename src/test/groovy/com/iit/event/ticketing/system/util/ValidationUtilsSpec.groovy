@@ -8,30 +8,30 @@ import spock.lang.Specification
 class ValidationUtilsSpec extends Specification {
 
     /**
-     * validatePrerequisitesToStartSimulation - Should return an empty list when both active vendor and customer counts are positive
+     * validateStartSimulation - Should return an empty list when both active vendor and customer counts are positive
      */
-    def "validatePrerequisitesToStartSimulation - Should return an empty list when both active vendor and customer counts are positive"() {
+    def "validateStartSimulation - Should return an empty list when both active vendor and customer counts are positive"() {
         given:
         int activeVendorCount = 1
         int customerCount = 1
 
         when:
-        List<String> errors = ValidationUtils.validatePrerequisitesToStartSimulation(activeVendorCount, customerCount)
+        List<String> errors = ValidationUtils.validateStartSimulation(activeVendorCount, customerCount)
 
         then:
         errors.isEmpty()
     }
 
     /**
-     * validatePrerequisitesToStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 1)
+     * validateStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 1)
      */
-    def "validatePrerequisitesToStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 1)"() {
+    def "validateStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 1)"() {
         given:
         int activeVendorCount = 0
         int customerCount = 0
 
         when:
-        List<String> errors = ValidationUtils.validatePrerequisitesToStartSimulation(activeVendorCount, customerCount)
+        List<String> errors = ValidationUtils.validateStartSimulation(activeVendorCount, customerCount)
 
         then:
         errors.size() == 2
@@ -40,15 +40,15 @@ class ValidationUtilsSpec extends Specification {
     }
 
     /**
-     * validatePrerequisitesToStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 2)
+     * validateStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 2)
      */
-    def "validatePrerequisitesToStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 2)"() {
+    def "validateStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 2)"() {
         given:
         int activeVendorCount = 1
         int customerCount = -1
 
         when:
-        List<String> errors = ValidationUtils.validatePrerequisitesToStartSimulation(activeVendorCount, customerCount)
+        List<String> errors = ValidationUtils.validateStartSimulation(activeVendorCount, customerCount)
 
         then:
         errors.size() == 1
@@ -56,15 +56,15 @@ class ValidationUtilsSpec extends Specification {
     }
 
     /**
-     * validatePrerequisitesToStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 3)
+     * validateStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 3)
      */
-    def "validatePrerequisitesToStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 3)"() {
+    def "validateStartSimulation - Should return an error list when both active vendor and customer counts are not positive (test case 3)"() {
         given:
         int activeVendorCount = 0
         int customerCount = 1
 
         when:
-        List<String> errors = ValidationUtils.validatePrerequisitesToStartSimulation(activeVendorCount, customerCount)
+        List<String> errors = ValidationUtils.validateStartSimulation(activeVendorCount, customerCount)
 
         then:
         errors.size() == 1
