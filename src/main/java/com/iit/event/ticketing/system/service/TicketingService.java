@@ -5,6 +5,7 @@ import com.iit.event.ticketing.system.core.model.entity.Customer;
 import com.iit.event.ticketing.system.core.model.entity.Vendor;
 import com.iit.event.ticketing.system.util.ValidationUtils;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -49,7 +50,7 @@ public class TicketingService {
     List<String> errors = ValidationUtils.validateStartSimulation(vendorService.getActiveVendors().size(), customerService.getCustomers().size());
 
     if (!errors.isEmpty()) {
-      log.error("Failed to start due to missing prerequisites - {};", String.join(", ", errors));
+      log.error("Failed to start due to missing prerequisites - Errors: {};", errors.stream().collect(Collectors.joining(", ", "[", "]")));
       return new ApiResponse<>(HttpStatus.UNPROCESSABLE_ENTITY, "Failed to start", errors);
     }
 
