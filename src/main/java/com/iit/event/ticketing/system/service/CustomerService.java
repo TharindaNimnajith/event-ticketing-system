@@ -41,20 +41,31 @@ public class CustomerService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addCustomer(final @NonNull Customer customer) {
-    log.debug("Adding customer - Id: {}; Name: {};", customer.getId(), customer.getName());
+    log.debug("Adding customer - Id: {};", customer.getId());
 
+    // Check if simulation is not running before adding the new customer
     if (TicketingService.isStarted()) {
-      log.debug("Failed to add customer since the simulation is currently running - Id: {}; Name: {};", customer.getId(), customer.getName());
-      return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to add customer", List.of("Simulation is currently running"));
+      log.error("Failed to add customer since the simulation is currently running - Id: {};", customer.getId());
+
+      return new ApiResponse<>(
+          HttpStatus.CONFLICT,
+          "Failed to add customer",
+          List.of("Simulation is currently running")
+      );
     }
 
+    // Set retrieval interval ticketing configuration and ticket pool
     customer.setRetrievalInterval(ticketingConfiguration.getCustomerRetrievalRate());
     customer.setTicketPool(ticketPool);
 
+    // Add customer to active customers list and save in database
     customers.add(customer);
     customerRepository.save(customer);
 
-    return new ApiResponse<>(HttpStatus.OK, "Customer added successfully");
+    return new ApiResponse<>(
+        HttpStatus.OK,
+        "Customer added successfully"
+    );
   }
 
   /**
@@ -64,7 +75,12 @@ public class CustomerService {
    */
   public @NonNull ApiResponse<List<Customer>> getCustomersList() {
     log.debug("Fetching customers list");
-    return new ApiResponse<>(HttpStatus.OK, "Customers fetched successfully", customerRepository.findAll());
+
+    return new ApiResponse<>(
+        HttpStatus.OK,
+        "Customers fetched successfully",
+        customerRepository.findAll()
+    );
   }
 
   /**

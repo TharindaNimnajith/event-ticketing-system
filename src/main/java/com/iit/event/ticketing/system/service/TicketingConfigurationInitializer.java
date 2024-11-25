@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 public class TicketingConfigurationInitializer implements ApplicationRunner {
 
   @NonNull
-  private static final String DEFAULT_VENDOR_NAME = "default_vendor";
+  private static final String DEFAULT_VENDOR_ID = "default_vendor";
 
   private static final int DEFAULT_VENDOR_TICKETS_PER_RELEASE = 1;
 
@@ -79,17 +79,22 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
     try {
       FileUtils.saveTicketingConfigurationsToFile(ticketingConfiguration);
     } catch (IOException ex) {
-      log.error("Error while saving ticketing configurations - File path: {}; Error: {};", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
+      log.error("Error while saving ticketing configurations - File path: {}; Error: {};",
+          TICKETING_CONFIGURATIONS_FILE_PATH,
+          ex.getMessage(),
+          ex
+      );
     }
   }
 
   /**
-   * Validate to ensure that Total Tickets user input is a non-negative integer not greater than Max Ticket Capacity, otherwise prompt again with a relevant error message
+   * <p> Validate to ensure that total tickets user input is a non-negative integer not greater than max ticket capacity </p>
+   * <p> Otherwise, prompt again with a relevant error message </p>
    *
    * @param scanner           Scanner (Not null)
    * @param prompt            Prompt (Not null)
-   * @param maxTicketCapacity Max Ticket Capacity
-   * @return Valid Total Tickets input
+   * @param maxTicketCapacity Max ticket capacity
+   * @return Valid total tickets input
    */
   private int validateInput(final @NonNull Scanner scanner, final @NonNull String prompt, final int maxTicketCapacity) {
     int totalTickets;
@@ -106,18 +111,22 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
           totalTickets = input;
           break;
         } else {
-          log.warn("\nIncorrect Input ({}) - Value should be non-negative", input);
+          log.warn("\nInvalid input (Value should be non-negative) - Input: {};", input);
         }
       } else {
         // Consuming invalid input
-        log.warn("\nIncorrect Input ({}) - Value should be an integer", scanner.next());
+        log.warn("\nInvalid input (Value should be an integer) - Input: {};", scanner.next());
       }
     }
 
-    // Check if Total Tickets user input is not greater than Max Ticket Capacity
-    while (totalTickets > maxTicketCapacity) {
-      log.warn("\nIncorrect Input - Total Tickets ({}) should not be greater than Max Ticket Capacity ({})", totalTickets, maxTicketCapacity);
-      totalTickets = validateInput(scanner, prompt);
+    // Check if total tickets user input is not greater than max ticket capacity
+    if (totalTickets > maxTicketCapacity) {
+      log.warn("\nInvalid input (Total tickets should not be greater than max ticket capacity) - Total tickets: {}; Max ticket capacity: {};",
+          totalTickets,
+          maxTicketCapacity
+      );
+
+      totalTickets = validateInput(scanner, prompt, maxTicketCapacity);
     }
 
     return totalTickets;
@@ -143,11 +152,11 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
         if (input > 0) {
           return input;
         } else {
-          log.warn("\nIncorrect Input ({}) - Value should be greater than 0", input);
+          log.warn("\nInvalid input (Value should be greater than 0) - Input: {};", input);
         }
       } else {
         // Consuming invalid input
-        log.warn("\nIncorrect Input ({}) - Value should be an integer", scanner.next());
+        log.warn("\nInvalid input (Value should be an integer) - Input: {};", scanner.next());
       }
     }
   }
@@ -158,7 +167,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
    * @param totalTickets Total tickets
    */
   private void addTotalTicketsToTicketPool(final int totalTickets) {
-    log.debug("Adding total tickets ({}) to ticket pool", totalTickets);
+    log.debug("Adding initial set of tickets to ticket pool - Total tickets: {};", totalTickets);
 
     // No need to add default vendor or tickets to the ticket pool if there are no tickets
     if (totalTickets <= 0) {
@@ -167,7 +176,7 @@ public class TicketingConfigurationInitializer implements ApplicationRunner {
     }
 
     // Add default vendor
-    Vendor vendor = new Vendor(DEFAULT_VENDOR_NAME, DEFAULT_VENDOR_TICKETS_PER_RELEASE);
+    Vendor vendor = new Vendor(DEFAULT_VENDOR_ID, DEFAULT_VENDOR_TICKETS_PER_RELEASE);
     ApiResponse<Object> apiResponse = vendorService.addVendor(vendor);
 
     // Handle failure cases when adding default vendor

@@ -42,20 +42,31 @@ public class VendorService {
    * @return ApiResponse (Not null)
    */
   public @NonNull ApiResponse<Object> addVendor(final @NonNull Vendor vendor) {
-    log.debug("Adding vendor - Id: {}; Name: {};", vendor.getId(), vendor.getName());
+    log.debug("Adding vendor - Id: {};", vendor.getId());
 
+    // Check if simulation is not running before adding the new vendor
     if (TicketingService.isStarted()) {
-      log.debug("Failed to add vendor since the simulation is currently running - Id: {}; Name: {};", vendor.getId(), vendor.getName());
-      return new ApiResponse<>(HttpStatus.CONFLICT, "Failed to add vendor", List.of("Simulation is currently running"));
+      log.error("Failed to add vendor since the simulation is currently running - Id: {};", vendor.getId());
+
+      return new ApiResponse<>(
+          HttpStatus.CONFLICT,
+          "Failed to add vendor",
+          List.of("Simulation is currently running")
+      );
     }
 
+    // Set release interval ticketing configuration and ticket pool
     vendor.setReleaseInterval(ticketingConfiguration.getTicketReleaseRate());
     vendor.setTicketPool(ticketPool);
 
+    // Add vendor to active vendors list and save in database
     activeVendors.add(vendor);
     vendorRepository.save(vendor);
 
-    return new ApiResponse<>(HttpStatus.OK, "Vendor added successfully");
+    return new ApiResponse<>(
+        HttpStatus.OK,
+        "Vendor added successfully"
+    );
   }
 
   /**
@@ -65,7 +76,12 @@ public class VendorService {
    */
   public @NonNull ApiResponse<List<Vendor>> getVendorsList() {
     log.debug("Fetching vendors list");
-    return new ApiResponse<>(HttpStatus.OK, "Vendors fetched successfully", vendorRepository.findAll());
+
+    return new ApiResponse<>(
+        HttpStatus.OK,
+        "Vendors fetched successfully",
+        vendorRepository.findAll()
+    );
   }
 
   /**
@@ -74,7 +90,7 @@ public class VendorService {
    * @param vendor Vendor (Not null)
    */
   public void removeVendor(final @NonNull Vendor vendor) {
-    log.debug("Remove vendor with Id: {}; Name: {};", vendor.getId(), vendor.getName());
+    log.debug("Remove vendor - Id: {};", vendor.getId());
 
     // Remove from active vendors list
     activeVendors.remove(vendor);

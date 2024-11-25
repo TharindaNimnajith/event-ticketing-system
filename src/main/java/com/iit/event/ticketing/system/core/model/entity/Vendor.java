@@ -16,7 +16,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.Duration;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,14 +36,9 @@ public class Vendor implements Runnable {
   @Id
   @Column(name = "id", nullable = false, updatable = false, unique = true)
   @JsonProperty("id")
-  @NonNull
-  private String id;
-
-  @Column(name = "name", nullable = false, unique = true)
-  @JsonProperty("name")
   @NotBlank
   @NonNull
-  private String name;
+  private String id;
 
   @Column(name = "tickets_per_release", nullable = false)
   @JsonProperty("tickets_per_release")
@@ -77,15 +71,17 @@ public class Vendor implements Runnable {
   /**
    * Vendor constructor
    *
-   * @param name              Name (Not null)
+   * @param id                Id (Not null)
    * @param ticketsPerRelease Tickets per release (Not null)
    */
   @JsonCreator
-  public Vendor(final @NonNull String name, final @NonNull Integer ticketsPerRelease) {
-    log.debug("Creating vendor - Name: {}; Tickets per release: {};", name, ticketsPerRelease);
+  public Vendor(final @NonNull String id, final @NonNull Integer ticketsPerRelease) {
+    log.debug("Creating vendor - Id: {}; Tickets per release: {};",
+        id,
+        ticketsPerRelease
+    );
 
-    this.id = UUID.randomUUID().toString();
-    this.name = StringUtils.trim(name);
+    this.id = StringUtils.trim(id);
     this.ticketsPerRelease = ticketsPerRelease;
     this.status = VendorStatus.ACTIVE;
     this.running = true;
@@ -96,7 +92,7 @@ public class Vendor implements Runnable {
    */
   @Override
   public void run() {
-    log.debug("Running vendor - Id: {}; Name: {};", id, name);
+    log.debug("Running vendor thread start - Id: {};", id);
 
     while (running) {
       ticketPool.addTickets(id, ticketsPerRelease);
@@ -104,19 +100,24 @@ public class Vendor implements Runnable {
       try {
         Thread.sleep(Duration.ofSeconds(releaseInterval));
       } catch (InterruptedException ex) {
-        log.error(ex.getMessage(), ex);
+        log.error("Vendor thread is interrupted while sleeping - Id: {}; Error: {};",
+            id,
+            ex.getMessage(),
+            ex
+        );
+
         Thread.currentThread().interrupt();
       }
     }
 
-    log.debug("Stopping vendor - Id: {}; Name: {};", id, name);
+    log.debug("Running vendor thread end - Id: {};", id);
   }
 
   /**
    * Stop vendor thread from running
    */
   public void stop() {
-    log.debug("Stopping vendor thread");
+    log.debug("Stop vendor thread - Id: {};", id);
     running = false;
   }
 }

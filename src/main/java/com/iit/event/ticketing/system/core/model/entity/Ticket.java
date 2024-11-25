@@ -54,7 +54,7 @@ public class Ticket {
    * @param vendorId Vendor Id (Not null)
    */
   public Ticket(final @NonNull String vendorId) {
-    log.debug("Creating ticket - Vendor Id: {}", vendorId);
+    log.debug("Creating ticket - Vendor Id: {};", vendorId);
 
     this.id = UUID.randomUUID().toString();
     this.vendorId = vendorId;

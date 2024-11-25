@@ -35,7 +35,11 @@ public class VendorController {
    */
   @PostMapping
   public @NonNull ResponseEntity<ApiResponse<Object>> addVendor(final @RequestBody @Valid @NonNull Vendor vendor) {
-    log.info("Add vendor - Id: {}; Name: {}; Tickets per release: {};", vendor.getId(), vendor.getName(), vendor.getTicketsPerRelease());
+    log.info("Add vendor - Id: {}; Tickets per release: {};",
+        vendor.getId(),
+        vendor.getTicketsPerRelease()
+    );
+
     ApiResponse<Object> apiResponse = vendorService.addVendor(vendor);
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }

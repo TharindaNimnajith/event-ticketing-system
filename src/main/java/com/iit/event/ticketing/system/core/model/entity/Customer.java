@@ -11,7 +11,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import java.time.Duration;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,14 +31,9 @@ public class Customer implements Runnable {
   @Id
   @Column(name = "id", nullable = false, updatable = false, unique = true)
   @JsonProperty("id")
-  @NonNull
-  private String id;
-
-  @Column(name = "name", nullable = false, unique = true)
-  @JsonProperty("name")
   @NotBlank
   @NonNull
-  private String name;
+  private String id;
 
   @Column(name = "retrieval_interval", nullable = false, updatable = false)
   @JsonProperty("retrieval_interval")
@@ -58,14 +52,13 @@ public class Customer implements Runnable {
   /**
    * Customer constructor
    *
-   * @param name Name (Not null)
+   * @param id Id (Not null)
    */
   @JsonCreator
-  public Customer(final @NonNull String name) {
-    log.debug("Creating customer - Name: {};", name);
+  public Customer(final @NonNull String id) {
+    log.debug("Creating customer - Id: {};", id);
 
-    this.id = UUID.randomUUID().toString();
-    this.name = StringUtils.trim(name);
+    this.id = StringUtils.trim(id);
     this.running = true;
   }
 
@@ -74,7 +67,7 @@ public class Customer implements Runnable {
    */
   @Override
   public void run() {
-    log.debug("Running customer - Id: {}; Name: {};", id, name);
+    log.debug("Running customer thread start - Id: {};", id);
 
     while (running) {
       ticketPool.removeTicket(id);
@@ -82,19 +75,24 @@ public class Customer implements Runnable {
       try {
         Thread.sleep(Duration.ofSeconds(retrievalInterval));
       } catch (InterruptedException ex) {
-        log.error(ex.getMessage(), ex);
+        log.error("Customer thread is interrupted while sleeping - Id: {}; Error: {};",
+            id,
+            ex.getMessage(),
+            ex
+        );
+
         Thread.currentThread().interrupt();
       }
     }
 
-    log.debug("Stopping customer - Id: {}; Name: {};", id, name);
+    log.debug("Running customer thread end - Id: {};", id);
   }
 
   /**
    * Stop customer thread from running
    */
   public void stop() {
-    log.debug("Stopping customer thread");
+    log.debug("Stop customer thread - Id: {};", id);
     running = false;
   }
 }

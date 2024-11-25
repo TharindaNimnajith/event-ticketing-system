@@ -35,7 +35,7 @@ public class CustomerController {
    */
   @PostMapping
   public @NonNull ResponseEntity<ApiResponse<Object>> addCustomer(final @RequestBody @Valid @NonNull Customer customer) {
-    log.info("Add customer - Id: {}; Name: {};", customer.getId(), customer.getName());
+    log.info("Add customer - Id: {};", customer.getId());
     ApiResponse<Object> apiResponse = customerService.addCustomer(customer);
     return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
   }

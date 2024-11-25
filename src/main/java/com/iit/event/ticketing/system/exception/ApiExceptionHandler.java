@@ -25,7 +25,10 @@ public class ApiExceptionHandler {
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public @NonNull ResponseEntity<ApiResponse<Object>> handleValidationExceptions(final @NonNull MethodArgumentNotValidException ex) {
-    log.error(ex.getMessage(), ex);
+    log.error("Error: {};",
+        ex.getMessage(),
+        ex
+    );
 
     // Extract field-specific error messages
     List<String> errors = ex.getBindingResult()
@@ -35,7 +38,11 @@ public class ApiExceptionHandler {
         .toList();
 
     // Create a standardized response
-    ApiResponse<Object> response = new ApiResponse<>(HttpStatus.BAD_REQUEST, "Validation error", errors);
+    ApiResponse<Object> response = new ApiResponse<>(
+        HttpStatus.BAD_REQUEST,
+        "Validation error",
+        errors
+    );
 
     return ResponseEntity.badRequest().body(response); // HttpStatus.BAD_REQUEST (400)
   }
@@ -48,10 +55,18 @@ public class ApiExceptionHandler {
    */
   @ExceptionHandler(Exception.class)
   public @NonNull ResponseEntity<ApiResponse<Object>> handleGeneralExceptions(final @NonNull Exception ex) {
-    log.error(ex.getMessage(), ex);
+    log.error("Exception type: {}; Error: {};",
+        ex.getClass().getName(),
+        ex.getMessage(),
+        ex
+    );
 
     // Create a standardized response
-    ApiResponse<Object> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error", List.of(ex.getMessage()));
+    ApiResponse<Object> response = new ApiResponse<>(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Internal error",
+        List.of(ex.getMessage())
+    );
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // 500
   }
