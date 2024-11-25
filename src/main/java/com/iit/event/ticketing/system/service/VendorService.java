@@ -70,6 +70,8 @@ public class VendorService {
     activeVendors.add(vendor);
     vendorRepository.save(vendor);
 
+    log.trace("Added vendor - Id: {};", vendor.getId());
+
     return new ApiResponse<>(HttpStatus.OK, "Vendor added successfully");
   }
 
@@ -89,7 +91,7 @@ public class VendorService {
    * @param vendor Vendor (Not null)
    */
   public void removeVendor(final @NonNull Vendor vendor) {
-    log.debug("Remove vendor - Id: {};", vendor.getId());
+    log.debug("Removing vendor - Id: {};", vendor.getId());
 
     // Remove from active vendors list
     activeVendors.remove(vendor);
@@ -97,5 +99,7 @@ public class VendorService {
     // Deactivate vendor status and update database record
     vendor.setStatus(VendorStatus.INACTIVE);
     vendorRepository.save(vendor);
+
+    log.trace("Removed vendor - Id: {};", vendor.getId());
   }
 }

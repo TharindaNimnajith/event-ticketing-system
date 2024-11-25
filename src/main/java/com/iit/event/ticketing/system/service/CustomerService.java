@@ -58,6 +58,8 @@ public class CustomerService {
     customers.add(customer);
     customerRepository.save(customer);
 
+    log.trace("Added customer - Id: {};", customer.getId());
+
     return new ApiResponse<>(HttpStatus.OK, "Customer added successfully");
   }
 

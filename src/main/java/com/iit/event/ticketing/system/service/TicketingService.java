@@ -61,6 +61,7 @@ public class TicketingService {
     for (Vendor vendor : vendorService.getActiveVendors()) {
       Thread thread = new Thread(vendor);
       thread.start();
+
       log.trace("Started vendor thread - Id: {};", vendor.getId());
     }
 
@@ -68,6 +69,7 @@ public class TicketingService {
     for (Customer customer : customerService.getCustomers()) {
       Thread thread = new Thread(customer);
       thread.start();
+
       log.trace("Started customer thread - Id: {};", customer.getId());
     }
 

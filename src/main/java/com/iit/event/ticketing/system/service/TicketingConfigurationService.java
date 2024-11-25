@@ -29,7 +29,7 @@ public class TicketingConfigurationService {
 
     try {
       TicketingConfiguration ticketingConfiguration = FileUtils.loadTicketingConfigurationsFromFile();
-      log.debug("Ticketing configurations fetched successfully - File path: {};\nTicketing configurations:\n{};", TICKETING_CONFIGURATIONS_FILE_PATH, ticketingConfiguration);
+      log.trace("Ticketing configurations fetched successfully - File path: {};\nTicketing configurations:\n{};", TICKETING_CONFIGURATIONS_FILE_PATH, ticketingConfiguration);
       return new ApiResponse<>(HttpStatus.OK, "Ticketing configurations fetched successfully", ticketingConfiguration);
     } catch (IOException ex) {
       log.error("Error while loading ticketing configurations - File path: {}; Error: {};", TICKETING_CONFIGURATIONS_FILE_PATH, ex.getMessage(), ex);
