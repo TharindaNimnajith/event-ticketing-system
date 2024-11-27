@@ -1,5 +1,6 @@
 package com.iit.event.ticketing.system.service;
 
+import brave.propagation.CurrentTraceContext;
 import com.iit.event.ticketing.system.core.model.ApiResponse;
 import com.iit.event.ticketing.system.core.model.entity.Customer;
 import com.iit.event.ticketing.system.core.model.entity.Vendor;
@@ -33,6 +34,9 @@ public class TicketingService {
   @NonNull
   private final CustomerService customerService;
 
+  @NonNull
+  private final CurrentTraceContext currentTraceContext;
+
   private List<Thread> vendorThreads;
   private List<Thread> customerThreads;
 
@@ -51,7 +55,10 @@ public class TicketingService {
     }
 
     // Validate if the system has one or more customers and active vendors to start simulation
-    List<String> errors = ValidationUtils.validateStartSimulation(vendorService.getActiveVendors().size(), customerService.getCustomers().size());
+    List<String> errors = ValidationUtils.validateStartSimulation(
+        vendorService.getActiveVendors().size(),
+        customerService.getCustomers().size()
+    );
 
     if (!errors.isEmpty()) {
       log.error("Failed to start due to missing prerequisites - Errors: {};", errors.stream().collect(Collectors.joining(", ", "[", "]")));
@@ -67,21 +74,21 @@ public class TicketingService {
 
     // Create vendor threads and add to vendor threads list
     for (Vendor vendor : vendorService.getActiveVendors()) {
-      Thread thread = new Thread(vendor);
+      Thread thread = new Thread(currentTraceContext.wrap(vendor));
       thread.setName(vendor.getId());
       vendorThreads.add(thread);
     }
 
-    log.trace("Created vendor threads - Count: {};", vendorThreads.size());
+    log.trace("Created vendor threads - Thread count: {};", vendorThreads.size());
 
     // Create customer threads and add to customer threads list
     for (Customer customer : customerService.getCustomers()) {
-      Thread thread = new Thread(customer);
+      Thread thread = new Thread(currentTraceContext.wrap(customer));
       thread.setName(customer.getId());
       customerThreads.add(thread);
     }
 
-    log.trace("Created customer threads - Count: {};", customerThreads.size());
+    log.trace("Created customer threads - Thread count: {};", customerThreads.size());
 
     // Start vendor threads
     for (Thread vendorThread : vendorThreads) {
