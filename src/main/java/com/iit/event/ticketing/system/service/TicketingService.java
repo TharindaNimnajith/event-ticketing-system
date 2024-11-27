@@ -95,6 +95,8 @@ public class TicketingService {
       log.trace("Started customer thread - Id: {};", customerThread.getName());
     }
 
+    log.debug("Started simulation");
+
     return new ApiResponse<>(HttpStatus.OK, "Started simulation");
   }
 
@@ -152,6 +154,8 @@ public class TicketingService {
 
     // Set started flag to false as simulation is not running
     setStarted(false);
+
+    log.debug("Stopped simulation");
 
     return new ApiResponse<>(HttpStatus.OK, "Stopped simulation");
   }
