@@ -3,6 +3,7 @@ package com.iit.event.ticketing.system.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -10,12 +11,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * Configuration class for setting up CORS (Cross-Origin Resource Sharing)
  */
 @Configuration
-public class CorsConfiguration {
+public class CorsWebConfiguration {
 
-  private static final String PATH_PATTERN = "/api/**";
-  private static final String ALLOWED_ORIGIN_FRONTEND_URL = "http://localhost:3000";
-  private static final String HTTP_METHOD_GET = "GET";
-  private static final String HTTP_METHOD_POST = "POST";
+  private static final String ALLOWED_ORIGIN_FRONTEND_URL_LOCALHOST = "http://localhost:3000";
 
   /**
    * Create CORS configuration bean that sets up allowed origins and HTTP methods for specific endpoints
@@ -33,9 +31,12 @@ public class CorsConfiguration {
       @Override
       public void addCorsMappings(final @NonNull CorsRegistry corsRegistry) {
         corsRegistry
-            .addMapping(PATH_PATTERN)
-            .allowedOrigins(ALLOWED_ORIGIN_FRONTEND_URL)
-            .allowedMethods(HTTP_METHOD_GET, HTTP_METHOD_POST);
+            .addMapping("/**")
+            .allowedOrigins(ALLOWED_ORIGIN_FRONTEND_URL_LOCALHOST)
+            .allowedOriginPatterns(CorsConfiguration.ALL)
+            .allowedHeaders(CorsConfiguration.ALL)
+            .allowCredentials(true)
+            .allowedMethods("GET", "POST");
       }
     };
   }
